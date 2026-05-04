@@ -88,7 +88,12 @@ jobs:
             VERSION="${GITHUB_REF#refs/tags/v}"
           else
             # Manual dispatch on master -- use latest tag or fallback
-            VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "1.0.0")
+            TAG=$(git describe --tags --abbrev=0 2>/dev/null || true)
+            if [ -n "$TAG" ]; then
+              VERSION="${TAG#v}"
+            else
+              VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync('package.json','utf8')).version)")
+            fi
           fi
           echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Resolved version: $VERSION"
