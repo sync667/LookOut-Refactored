@@ -1,9 +1,6 @@
 import { TnefExtractor } from "/scripts/lookout.mjs"
 import * as storage from "./scripts/storage.mjs";
 
-// Migrate legacy prefs to local storage.
-await storage.migratePrefs();
-
 async function handleMessage(tab, message) {
   // Skip if message is junk.
   if (message.junk) {

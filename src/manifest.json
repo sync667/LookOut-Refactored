@@ -37,20 +37,6 @@
         ],
         "script": "api/Attachment/implementation.js"
       }
-    },
-    "LegacyPrefs": {
-      "schema": "api/LegacyPrefs/schema.json",
-      "parent": {
-        "scopes": [
-          "addon_parent"
-        ],
-        "paths": [
-          [
-            "LegacyPrefs"
-          ]
-        ],
-        "script": "api/LegacyPrefs/implementation.js"
-      }
     }
   },
   "background": {
