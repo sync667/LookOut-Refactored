@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const localesDir = join(__dirname, "..", "src", "_locales");
 
-const canonicalPath = join(localesDir, "en-US", "messages.json");
+const canonicalPath = join(localesDir, "en_US", "messages.json");
 const canonical = JSON.parse(readFileSync(canonicalPath, "utf8"));
 const canonicalKeys = new Set(Object.keys(canonical));
 
@@ -19,7 +19,7 @@ let hasErrors = false;
 
 const locales = readdirSync(localesDir);
 for (const locale of locales) {
-  if (locale === "en-US") continue;
+  if (locale === "en_US") continue;
   const localePath = join(localesDir, locale, "messages.json");
   let messages;
   try {
