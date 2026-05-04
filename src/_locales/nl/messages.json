@@ -27,7 +27,7 @@
         "message": "LookOut zet TNEF-bijlagen (zoals die in winmail.dat) om in leesbare vorm en plaatst deze in het bijlagenvak."
     },
     "extensionName": {
-        "message": "LookOut (fix version)"
+        "message": "LookOut (Refactored)"
     },
     "extensions.lookout.attach_raw_mapi": {
         "message": "false"

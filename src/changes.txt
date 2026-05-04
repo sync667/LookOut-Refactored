@@ -1,3 +1,10 @@
+8.0
+Refactored release for publication on the official Thunderbird Add-ons site.
+* Renamed to LookOut (Refactored)
+* Updated extension ID and homepage to the new repository
+* Removed strict_max_version to support all current and future Thunderbird versions
+* Fixed attachment removal bug (splice called without count, removing too many attachments)
+
 7.1
 V144.* compatibility bump
 

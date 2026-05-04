@@ -2,17 +2,16 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
-      "id": "lookout@s3_fix_version",
-      "strict_min_version": "140.0",
-      "strict_max_version": "144.*"
+      "id": "lookout@refactored",
+      "strict_min_version": "140.0"
     }
   },
-  "version": "7.1",
+  "version": "8.0",
   "default_locale": "en-US",
-  "author": "Dugite-Code",
-  "homepage_url": "https://github.com/TB-throwback/LookOut-fix-version/",
+  "author": "sync667",
+  "homepage_url": "https://github.com/sync667/LookOut-Refactored/",
   "icons": {
     "32": "icons/LOicon-32.png",
     "48": "icons/LOicon-48.png",

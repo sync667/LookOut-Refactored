@@ -198,7 +198,7 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
           for (let index = window.currentAttachments.length; index > 0; index--) {
             let idx = index - 1;
             if (partNames.includes(window.currentAttachments[idx].partID)) {
-              window.currentAttachments.splice(idx);
+              window.currentAttachments.splice(idx, 1);
               modified = true;
             }
           }
