@@ -3,16 +3,23 @@
   "version": "8.0.0",
   "description": "Thunderbird extension that reads TNEF/winmail.dat attachments",
   "private": true,
+  "type": "module",
   "scripts": {
     "lint": "eslint \"src/**/*.{js,mjs}\"",
     "lint:locales": "node scripts/lint-locales.js",
     "build": "web-ext build --source-dir=src --artifacts-dir=dist",
     "package": "web-ext build --source-dir=src --artifacts-dir=dist",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.mjs"
+    ]
   },
   "devDependencies": {
     "eslint": "^8.57.0",
-    "web-ext": "^8.3.0",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "web-ext": "^8.3.0"
   }
 }

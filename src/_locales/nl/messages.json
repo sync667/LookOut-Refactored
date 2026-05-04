@@ -29,21 +29,6 @@
     "extensionName": {
         "message": "LookOut (Refactored)"
     },
-    "extensions.lookout.attach_raw_mapi": {
-        "message": "false"
-    },
-    "extensions.lookout.body_part_prefix": {
-        "message": "body_part_"
-    },
-    "extensions.lookout.description": {
-        "message": "LookOut zet TNEF-bijlagen (zoals die in winmail.dat) om in leesbare vorm en plaatst deze in het bijlagenvak."
-    },
-    "extensions.lookout.direct_to_calendar": {
-        "message": "false"
-    },
-    "extensions.lookout.disable_filename_character_set": {
-        "message": "false"
-    },
     "lookout.label": {
         "message": "Vertaald menu-item"
     },
@@ -64,5 +49,41 @@
     },
     "strict_contenttype_check.label": {
         "message": "Bestandstype strenger controleren"
+    },
+    "group.attachments": {
+        "message": "Attachment handling"
+    },
+    "group.calendar": {
+        "message": "Calendar / Contacts"
+    },
+    "group.advanced": {
+        "message": "Advanced / Debug"
+    },
+    "attach_raw_mapi_check.hint": {
+        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
+    },
+    "direct_to_calendar_check.hint": {
+        "message": "Automatically open calendar invitations and contact cards without saving them first."
+    },
+    "disable_filename_character_set_check.hint": {
+        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames. Enable if filenames look garbled."
+    },
+    "remove_winmail_dat_check.hint": {
+        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+    },
+    "strict_contenttype_check.hint": {
+        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef."
+    },
+    "enable_debug_check.hint": {
+        "message": "Write verbose [LookOut] messages to the browser console."
+    },
+    "tnef.info.prefix": {
+        "message": "What is TNEF? Learn more on the"
+    },
+    "tnef.info.link": {
+        "message": "LookOut (Refactored) README"
+    },
+    "tnef.info.suffix": {
+        "message": "page."
     }
 }

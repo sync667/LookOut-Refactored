@@ -21,7 +21,8 @@
   "icons": {
     "32": "icons/LOicon-32.png",
     "48": "icons/LOicon-48.png",
-    "64": "icons/LOicon-64.png"
+    "64": "icons/LOicon-64.png",
+    "128": "icons/LOicon-128.png"
   },
   "experiment_apis": {
     "Attachment": {

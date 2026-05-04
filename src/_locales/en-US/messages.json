@@ -2,11 +2,32 @@
     "extensionName": {
         "message": "LookOut (Refactored)"
     },
+    "extensionDescription": {
+        "message": "LookOut reads and integrates TNEF encoded parts in emails."
+    },
+    "prefwindow.title": {
+        "message": "LookOut preferences"
+    },
+    "pane1.title": {
+        "message": "LookOut preferences"
+    },
+    "group.attachments": {
+        "message": "Attachment handling"
+    },
+    "group.calendar": {
+        "message": "Calendar / Contacts"
+    },
+    "group.advanced": {
+        "message": "Advanced / Debug"
+    },
     "attach_raw_mapi_check.accesskey": {
         "message": "M"
     },
     "attach_raw_mapi_check.label": {
         "message": "Attach MAPI Properties"
+    },
+    "attach_raw_mapi_check.hint": {
+        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
     },
     "direct_to_calendar_check.accesskey": {
         "message": "C"
@@ -14,44 +35,17 @@
     "direct_to_calendar_check.label": {
         "message": "Open Calendaring Data Directly"
     },
+    "direct_to_calendar_check.hint": {
+        "message": "Automatically open calendar invitations and contact cards without saving them first."
+    },
     "disable_filename_character_set_check.accesskey": {
         "message": "F"
     },
     "disable_filename_character_set_check.label": {
         "message": "Disable Filename Character Set Conversion"
     },
-    "enable_debug_check.accesskey": {
-        "message": "E"
-    },
-    "enable_debug_check.label": {
-        "message": "Enable Debugging"
-    },
-    "extensionDescription": {
-        "message": "LookOut reads and integrates TNEF encoded parts in emails."
-    },
-    "extensions.lookout.attach_raw_mapi": {
-        "message": "false"
-    },
-    "extensions.lookout.body_part_prefix": {
-        "message": "body_part_"
-    },
-    "extensions.lookout.description": {
-        "message": "LookOut reads and integrates TNEF encoded parts in emails"
-    },
-    "extensions.lookout.direct_to_calendar": {
-        "message": "false"
-    },
-    "extensions.lookout.disable_filename_character_set": {
-        "message": "false"
-    },
-    "lookout.label": {
-        "message": "Your localized menuitem"
-    },
-    "pane1.title": {
-        "message": "LookOut preferences"
-    },
-    "prefwindow.title": {
-        "message": "LookOut preferences"
+    "disable_filename_character_set_check.hint": {
+        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames. Enable if filenames look garbled."
     },
     "remove_winmail_dat_check.accesskey": {
         "message": "R"
@@ -59,10 +53,37 @@
     "remove_winmail_dat_check.label": {
         "message": "Remove Winmail.dat"
     },
+    "remove_winmail_dat_check.hint": {
+        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+    },
     "strict_contenttype_check.accesskey": {
         "message": "S"
     },
     "strict_contenttype_check.label": {
         "message": "Strict Content Type Matching"
+    },
+    "strict_contenttype_check.hint": {
+        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef. Disable to process any attachment that looks like TNEF."
+    },
+    "enable_debug_check.accesskey": {
+        "message": "E"
+    },
+    "enable_debug_check.label": {
+        "message": "Enable Debugging"
+    },
+    "enable_debug_check.hint": {
+        "message": "Write verbose [LookOut] messages to the browser console. Useful for diagnosing parsing problems."
+    },
+    "tnef.info.prefix": {
+        "message": "What is TNEF? Learn more on the"
+    },
+    "tnef.info.link": {
+        "message": "LookOut (Refactored) README"
+    },
+    "tnef.info.suffix": {
+        "message": "page."
+    },
+    "lookout.label": {
+        "message": "Your localized menuitem"
     }
 }
