@@ -50,7 +50,7 @@ function ClearAttachmentList(window) {
   }
 }
 
-const Attachment = class extends ExtensionCommon.ExtensionAPI { // eslint-disable-line no-unused-vars
+var Attachment = class extends ExtensionCommon.ExtensionAPI { // eslint-disable-line no-unused-vars
   getAPI(context) {
 
     function getMessageWindow(tabId) {
