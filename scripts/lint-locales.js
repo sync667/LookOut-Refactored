@@ -35,7 +35,8 @@ for (const locale of locales) {
   const extra = [...localeKeys].filter((k) => !canonicalKeys.has(k));
 
   if (missing.length > 0) {
-    console.warn(`[WARN] ${locale} missing keys: ${missing.join(", ")}`);
+    console.error(`[ERROR] ${locale} missing keys: ${missing.join(", ")}`);
+    hasErrors = true;
   }
   if (extra.length > 0) {
     console.warn(`[WARN] ${locale} has extra keys: ${extra.join(", ")}`);

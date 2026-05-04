@@ -1,64 +1,13 @@
 /**
- * Unit tests for TnefReader in src/scripts/lookout.mjs
+ * Unit tests for TnefReader (src/scripts/tnef-reader.mjs).
  *
- * We test just the TnefReader class by re-implementing it inline here
- * (since it's not exported separately — the export is TnefExtractor).
- * These tests verify the DataView-based reading logic.
+ * Run with: node --experimental-vm-modules node_modules/.bin/jest tests/tnef-reader.test.mjs
+ *
+ * These tests import the production module so they will catch regressions
+ * if the implementation in tnef-reader.mjs ever changes.
  */
 
-// Inline TnefReader (mirrors the implementation in lookout.mjs) for testability.
-class TnefReader {
-  constructor() {
-    this.file = null;
-    this.buffer = null;
-    this.view = null;
-    this.offset = 0;
-  }
-
-  loadBuffer(arrayBuffer) {
-    this.buffer = arrayBuffer;
-    this.view = new DataView(arrayBuffer);
-    this.offset = 0;
-  }
-
-  available() {
-    return this.buffer.byteLength - this.offset;
-  }
-
-  test(bytes) {
-    if (this.available() < bytes) {
-      throw new Error(
-        `TnefReader: tried to read ${bytes} bytes but only ${this.available()} remain`
-      );
-    }
-  }
-
-  readByteArray(bytes) {
-    this.test(bytes);
-    const result = [];
-    for (let i = 0; i < bytes; i++) {
-      result[i] = this.view.getUint8(this.offset + i);
-    }
-    this.offset += bytes;
-    return result;
-  }
-
-  read8() {
-    this.test(1);
-    const val = this.view.getUint8(this.offset);
-    this.offset += 1;
-    return val;
-  }
-
-  readBytes(bytes) {
-    const arr = this.readByteArray(bytes);
-    let s = "";
-    for (const b of arr) {
-      s += String.fromCharCode(b);
-    }
-    return s;
-  }
-}
+import { TnefReader } from "../src/scripts/tnef-reader.mjs";
 
 function makeBuffer(...bytes) {
   return new Uint8Array(bytes).buffer;

@@ -1,20 +1,17 @@
 import { tnef_parse } from "/scripts/tnef.mjs";
 import { createLogger } from "/scripts/logger.mjs";
+import { TnefReader } from "/scripts/tnef-reader.mjs";
 
 /**
- * Binary stream reader backed by an ArrayBuffer / DataView.
- * Replaces the old PseudoInputStream string-based approach with direct DataView access.
+ * Extend TnefReader with the ability to load a browser File object.
+ * The base class (in tnef-reader.mjs) is dependency-free and testable
+ * in Node.js / Jest; this thin subclass adds the browser File API.
  */
-class TnefReader {
+class FileTnefReader extends TnefReader {
   constructor() {
+    super();
     /** @type {File|null} */
     this.file = null;
-    /** @type {ArrayBuffer|null} */
-    this.buffer = null;
-    /** @type {DataView|null} */
-    this.view = null;
-    /** @type {number} */
-    this.offset = 0;
   }
 
   /**
@@ -23,70 +20,7 @@ class TnefReader {
    */
   async setFile(file) {
     this.file = file;
-    this.buffer = await this.file.arrayBuffer();
-    this.view = new DataView(this.buffer);
-    this.offset = 0;
-  }
-
-  /** @returns {number} bytes remaining */
-  available() {
-    return this.buffer.byteLength - this.offset;
-  }
-
-  /**
-   * Assert at least `bytes` bytes remain.
-   * @param {number} bytes
-   */
-  test(bytes) {
-    if (this.available() < bytes) {
-      throw new Error(`TnefReader: tried to read ${bytes} bytes but only ${this.available()} remain`);
-    }
-  }
-
-  /**
-   * Read n bytes as a plain JS array of unsigned integers.
-   * @param {number} bytes
-   * @returns {number[]}
-   */
-  readByteArray(bytes) {
-    this.test(bytes);
-    const result = [];
-    for (let i = 0; i < bytes; i++) {
-      result[i] = this.view.getUint8(this.offset + i);
-    }
-    this.offset += bytes;
-    return result;
-  }
-
-  /**
-   * Read a single byte.
-   * @returns {number}
-   */
-  read8() {
-    this.test(1);
-    const val = this.view.getUint8(this.offset);
-    this.offset += 1;
-    return val;
-  }
-
-  /**
-   * Read n bytes as a binary string (one char per byte, charCode == byte value).
-   * The downstream TNEF parser still operates on binary strings, so we keep this
-   * interface while using DataView internally.
-   * @param {number} bytes
-   * @returns {string}
-   */
-  readBytes(bytes) {
-    const arr = this.readByteArray(bytes);
-    let s = "";
-    for (const b of arr) {
-      s += String.fromCharCode(b);
-    }
-    return s;
-  }
-
-  close() {
-    // no-op — GC handles the ArrayBuffer
+    this.loadBuffer(await file.arrayBuffer());
   }
 }
 
@@ -94,7 +28,7 @@ class TnefReader {
 
 export class TnefExtractor {
   constructor() {
-    this.mStream = new TnefReader();
+    this.mStream = new FileTnefReader();
     this.files = [];
     this.mPartId = 0;
   }

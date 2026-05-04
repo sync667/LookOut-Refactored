@@ -1,7 +1,7 @@
 /**
  * Unit tests for src/scripts/logger.mjs
  *
- * Run with: npx jest tests/logger.test.mjs
+ * Run with: node --experimental-vm-modules node_modules/.bin/jest tests/logger.test.mjs
  */
 
 import { createLogger } from "../src/scripts/logger.mjs";

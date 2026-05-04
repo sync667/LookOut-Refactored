@@ -9,8 +9,17 @@ let log = createLogger(5);
 const processingTabs = new Set();
 
 /**
+ * Pending message per tab — set when a new displayedMessage event arrives
+ * while the tab is still being processed. After the current run finishes we
+ * pick this up so fast message switches are never silently dropped.
+ * @type {Map<number, { junk: boolean }>}
+ */
+const pendingMessages = new Map();
+
+/**
  * Handle a single displayed message in a tab.
- * Deduplicates concurrent calls for the same tab.
+ * If the tab is already being processed, the new message is queued and
+ * will be processed once the current run completes.
  *
  * @param {{ id: number }} tab
  * @param {{ junk: boolean }} message
@@ -20,9 +29,11 @@ async function handleMessage(tab, message) {
     return;
   }
 
-  // Deduplicate: skip if this tab is already being processed.
+  // If this tab is already being processed, remember the latest message and
+  // bail out — the finally-block below will pick it up after the current run.
   if (processingTabs.has(tab.id)) {
-    log.log(`Skipping tab ${tab.id} — already processing`, 7);
+    log.log(`Tab ${tab.id} busy — queuing latest message`, 7);
+    pendingMessages.set(tab.id, message);
     return;
   }
   processingTabs.add(tab.id);
@@ -34,13 +45,13 @@ async function handleMessage(tab, message) {
       return;
     }
 
-    // Get the current prefs.
+    // Get the current prefs — fall back to documented defaults on error.
     let prefs;
     try {
       prefs = await storage.getPrefs();
     } catch (err) {
       log.error(`Failed to load prefs, using defaults: ${err.message}`);
-      prefs = await storage.getPrefs().catch(() => ({}));
+      prefs = storage.PREF_DEFAULTS;
     }
 
     // Re-create logger with actual debug level.
@@ -112,6 +123,12 @@ async function handleMessage(tab, message) {
     log.error(`handleMessage error for tab ${tab.id}: ${err.message}`);
   } finally {
     processingTabs.delete(tab.id);
+    // If a newer message arrived while we were busy, process it now.
+    const queued = pendingMessages.get(tab.id);
+    if (queued) {
+      pendingMessages.delete(tab.id);
+      handleMessage(tab, queued);
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-const PREF_DEFAULTS = {
+export const PREF_DEFAULTS = {
   "attach_raw_mapi": false,
   "direct_to_calendar": false,
   "disable_filename_character_set": false,

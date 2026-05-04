@@ -21,7 +21,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 - `src/` -- Extension source code
 - `src/api/` -- WebExtension Experiment APIs
-- `src/modules/` -- ES6 modules (TNEF decoder, MAPI, iCal, vCard)
+- `src/scripts/` -- ES6 modules (TNEF decoder, MAPI, iCal, vCard, logger)
 - `src/options/` -- Options page UI
 - `src/icons/` -- Extension icons
 - `src/_locales/` -- Internationalisation strings
