@@ -12,13 +12,13 @@
         "message": "LookOut-Einstellungen"
     },
     "group.attachments": {
-        "message": "Attachment handling"
+        "message": "Anhangverarbeitung"
     },
     "group.calendar": {
-        "message": "Calendar / Contacts"
+        "message": "Kalender / Kontakte"
     },
     "group.advanced": {
-        "message": "Advanced / Debug"
+        "message": "Erweitert / Fehlersuche"
     },
     "attach_raw_mapi_check.accesskey": {
         "message": "M"
@@ -27,7 +27,7 @@
         "message": "MAPI-Eigenschaften speichern"
     },
     "attach_raw_mapi_check.hint": {
-        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
+        "message": "Einen Klartext-Auszug der rohen MAPI-Eigenschaften zusammen mit den decodierten Dateien anhängen."
     },
     "direct_to_calendar_check.accesskey": {
         "message": "K"
@@ -36,7 +36,7 @@
         "message": "Kalenderdaten direkt öffnen"
     },
     "direct_to_calendar_check.hint": {
-        "message": "Automatically open calendar invitations and contact cards without saving them first."
+        "message": "Kalendereinladungen und Kontaktkarten automatisch öffnen, ohne sie vorher zu speichern."
     },
     "disable_filename_character_set_check.accesskey": {
         "message": "Z"
@@ -45,7 +45,7 @@
         "message": "Zeichensatzkonvertierung für Dateinamen deaktivieren"
     },
     "disable_filename_character_set_check.hint": {
-        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames. Enable if filenames look garbled."
+        "message": "Die OEM-Codepage → Unicode-Konvertierung der Dateinamen von Anhängen überspringen. Aktivieren, falls Dateinamen verstümmelt aussehen."
     },
     "remove_winmail_dat_check.accesskey": {
         "message": "W"
@@ -54,7 +54,7 @@
         "message": "Winmail.dat entfernen"
     },
     "remove_winmail_dat_check.hint": {
-        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+        "message": "Den rohen winmail.dat-Anhang ausblenden, nachdem sein Inhalt extrahiert wurde."
     },
     "strict_contenttype_check.accesskey": {
         "message": "S"
@@ -63,7 +63,7 @@
         "message": "Strict-Content-Type-Übereinstimmung"
     },
     "strict_contenttype_check.hint": {
-        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef."
+        "message": "Nur Anhänge mit dem Namen \"winmail.dat\" oder dem Inhaltstyp application/ms-tnef verarbeiten. Deaktivieren, um alle Anhänge zu verarbeiten, die wie TNEF aussehen."
     },
     "enable_debug_check.accesskey": {
         "message": "D"
@@ -72,16 +72,16 @@
         "message": "Debugging aktivieren"
     },
     "enable_debug_check.hint": {
-        "message": "Write verbose [LookOut] messages to the browser console."
+        "message": "Ausführliche [LookOut]-Meldungen in die Browser-Konsole schreiben. Nützlich zur Diagnose von Parsing-Problemen."
     },
     "tnef.info.prefix": {
-        "message": "What is TNEF? Learn more on the"
+        "message": "Was ist TNEF? Erfahren Sie mehr auf der"
     },
     "tnef.info.link": {
         "message": "LookOut (Refactored) README"
     },
     "tnef.info.suffix": {
-        "message": "page."
+        "message": "Seite."
     },
     "lookout.label": {
         "message": "Übersetzter Menüpunkt"

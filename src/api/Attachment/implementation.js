@@ -1,3 +1,4 @@
+/* global AttachmentInfo */
 /*
  * Author: John Bieling (john@thunderbird.net)
  *
@@ -6,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-var { ExtensionCommon } = ChromeUtils.importESModule(
+const { ExtensionCommon } = ChromeUtils.importESModule(
   "resource://gre/modules/ExtensionCommon.sys.mjs"
 );
-var { ExtensionUtils } = ChromeUtils.importESModule(
+const { ExtensionUtils } = ChromeUtils.importESModule(
   "resource://gre/modules/ExtensionUtils.sys.mjs"
 );
-var { ExtensionError } = ExtensionUtils;
+const { ExtensionError } = ExtensionUtils;
 
 ChromeUtils.defineESModuleGetters(this, {
   AttachmentInfo: "resource:///modules/AttachmentInfo.sys.mjs",
@@ -21,27 +22,27 @@ ChromeUtils.defineESModuleGetters(this, {
 Cu.importGlobalProperties(["File", "IOUtils", "PathUtils"]);
 
 async function getRealFileForFile(file) {
-  let pathTempFile = await IOUtils.createUniqueFile(
+  const pathTempFile = await IOUtils.createUniqueFile(
     PathUtils.tempDir,
     file.name.replaceAll(/[/:*?\"<>|]/g, "_"),
     0o600
   );
 
-  let tempFile = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
+  const tempFile = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
   tempFile.initWithPath(pathTempFile);
-  let extAppLauncher = Cc[
+  const extAppLauncher = Cc[
     "@mozilla.org/uriloader/external-helper-app-service;1"
   ].getService(Ci.nsPIExternalAppLauncher);
   extAppLauncher.deleteTemporaryFileOnExit(tempFile);
 
-  let buffer = await file.arrayBuffer();
+  const buffer = await file.arrayBuffer();
   await IOUtils.write(pathTempFile, new Uint8Array(buffer));
   return tempFile;
 }
 
 function ClearAttachmentList(window) {
   // clear selection
-  var list = window.document.getElementById("attachmentList");
+  const list = window.document.getElementById("attachmentList");
   list.clearSelection();
 
   while (list.hasChildNodes()) {
@@ -49,24 +50,24 @@ function ClearAttachmentList(window) {
   }
 }
 
-var Attachment = class extends ExtensionCommon.ExtensionAPI {
+const Attachment = class extends ExtensionCommon.ExtensionAPI { // eslint-disable-line no-unused-vars
   getAPI(context) {
 
     function getMessageWindow(tabId) {
       // Get about:message from the tabId.
-      let { nativeTab } = context.extension.tabManager.get(tabId);
+      const { nativeTab } = context.extension.tabManager.get(tabId);
       if (nativeTab instanceof Ci.nsIDOMWindow) {
         return nativeTab.messageBrowser.contentWindow
-      } else if (nativeTab.mode && nativeTab.mode.name == "mail3PaneTab") {
+      } else if (nativeTab.mode && nativeTab.mode.name === "mail3PaneTab") {
         return nativeTab.chromeBrowser.contentWindow.messageBrowser.contentWindow
-      } else if (nativeTab.mode && nativeTab.mode.name == "mailMessageTab") {
+      } else if (nativeTab.mode && nativeTab.mode.name === "mailMessageTab") {
         return nativeTab.chromeBrowser.contentWindow;
       }
       return null;
     }
 
     async function getAttachmentFromUrl(url) {
-      let channel = Services.io.newChannelFromURI(
+      const channel = Services.io.newChannelFromURI(
         Services.io.newURI(url),
         null,
         Services.scriptSecurityManager.getSystemPrincipal(),
@@ -75,8 +76,8 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
         Ci.nsIContentPolicy.TYPE_OTHER
       );
 
-      let raw = await new Promise((resolve, reject) => {
-        let listener = Cc["@mozilla.org/network/stream-loader;1"].createInstance(
+      const raw = await new Promise((resolve, reject) => {
+        const listener = Cc["@mozilla.org/network/stream-loader;1"].createInstance(
           Ci.nsIStreamLoader
         );
         listener.init({
@@ -86,7 +87,7 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
             } else {
               reject(
                 new ExtensionError(
-                  `Failed to read attachment ${attachment.url} content: ${status}`
+                  `Failed to read attachment ${url} content: ${status}`
                 )
               );
             }
@@ -105,17 +106,17 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
      * @returns {nsIMsgHdr} nsIMsgHdr
      */
     function getDisplayedMessage(tabId) {
-      let { nativeTab } = context.extension.tabManager.get(tabId);
+      const { nativeTab } = context.extension.tabManager.get(tabId);
       if (nativeTab instanceof Ci.nsIDOMWindow) {
         if (nativeTab.messageBrowser) {
           return nativeTab.messageBrowser.contentWindow.gMessage;
         }
-      } else if (nativeTab.mode.name == "mail3PaneTab") {
-        let msgHdrs = nativeTab.chromeBrowser.contentWindow.gDBView.getSelectedMsgHdrs();
-        if (msgHdrs.length == 1) {
+      } else if (nativeTab.mode.name === "mail3PaneTab") {
+        const msgHdrs = nativeTab.chromeBrowser.contentWindow.gDBView.getSelectedMsgHdrs();
+        if (msgHdrs.length === 1) {
           return msgHdrs[0];
         }
-      } else if (nativeTab.mode.name == "mailMessageTab") {
+      } else if (nativeTab.mode.name === "mailMessageTab") {
         return nativeTab.chromeBrowser.contentWindow.gMessage;
       }
       return null;
@@ -124,13 +125,13 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
     return {
       Attachment: {
         listAttachments: async function (tabId) {
-          let window = getMessageWindow(tabId);
+          const window = getMessageWindow(tabId);
           if (!window || !window.currentAttachments) {
             return [];
           }
-          let attachments = [];
-          for (let attachmentInfo of window.currentAttachments) {
-            let attachment = {
+          const attachments = [];
+          for (const attachmentInfo of window.currentAttachments) {
+            const attachment = {
               contentType: attachmentInfo.contentType,
               name: attachmentInfo.name,
               partName: attachmentInfo.partID,
@@ -141,33 +142,33 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
           return attachments;
         },
         getAttachmentFile: async function (tabId, partName) {
-          let window = getMessageWindow(tabId);
+          const window = getMessageWindow(tabId);
           if (!window) {
             return
           }
-          let attachmentInfo = window.currentAttachments.find(a => a.partID == partName);
+          const attachmentInfo = window.currentAttachments.find(a => a.partID === partName);
           if (!attachmentInfo) {
             throw new ExtensionError(`Attachment with partName ${partName} not found`);
           }
-          let bytes = await getAttachmentFromUrl(attachmentInfo.url);
+          const bytes = await getAttachmentFromUrl(attachmentInfo.url);
           return new File([bytes], attachmentInfo.name, { type: attachmentInfo.contentType });
         },
         addAttachments: async function (tabId, newAttachments) {
-          let window = getMessageWindow(tabId);
+          const window = getMessageWindow(tabId);
           if (!window) {
             return
           }
 
           let modified = false;
-          for (let attachment of newAttachments) {
+          for (const attachment of newAttachments) {
             try {
-              let msgHdr = getDisplayedMessage(tabId);
+              const msgHdr = getDisplayedMessage(tabId);
               if (!msgHdr) {
                 continue;
               }
-              let realFile = await getRealFileForFile(attachment.file);
-              let url = `${Services.io.newFileURI(realFile).spec}?part=${attachment.partName}`;
-              let attachmentInfo = new AttachmentInfo({
+              const realFile = await getRealFileForFile(attachment.file);
+              const url = `${Services.io.newFileURI(realFile).spec}?part=${attachment.partName}`;
+              const attachmentInfo = new AttachmentInfo({
                 contentType: attachment.contentType,
                 url,
                 name: attachment.name,
@@ -194,14 +195,14 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
           window.gBuildAttachmentsForCurrentMsg = true;
         },
         removeAttachments: async function (tabId, partNames) {
-          let window = getMessageWindow(tabId);
+          const window = getMessageWindow(tabId);
           if (!window || !window.currentAttachments) {
             return;
           }
 
           let modified = false;
           for (let index = window.currentAttachments.length; index > 0; index--) {
-            let idx = index - 1;
+            const idx = index - 1;
             if (partNames.includes(window.currentAttachments[idx].partID)) {
               window.currentAttachments.splice(idx, 1);
               modified = true;

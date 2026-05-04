@@ -30,7 +30,7 @@
         "message": "LookOut odczytuje i dołącza części emaila kodowane w formacie TNEF"
     },
     "lookout.label": {
-        "message": "Your localized menuitem"
+        "message": "Element menu LookOut"
     },
     "pane1.title": {
         "message": "Ustawienia LookOut"
@@ -51,39 +51,39 @@
         "message": "Dokładne dopasowanie typu zawartości"
     },
     "group.attachments": {
-        "message": "Attachment handling"
+        "message": "Obsługa załączników"
     },
     "group.calendar": {
-        "message": "Calendar / Contacts"
+        "message": "Kalendarz / Kontakty"
     },
     "group.advanced": {
-        "message": "Advanced / Debug"
+        "message": "Zaawansowane / Debugowanie"
     },
     "attach_raw_mapi_check.hint": {
-        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
+        "message": "Dołącz zrzut surowych właściwości MAPI w postaci tekstu do zdekodowanych plików."
     },
     "direct_to_calendar_check.hint": {
-        "message": "Automatically open calendar invitations and contact cards without saving them first."
+        "message": "Automatycznie otwieraj zaproszenia kalendarza i karty kontaktów bez wcześniejszego zapisywania."
     },
     "disable_filename_character_set_check.hint": {
-        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames. Enable if filenames look garbled."
+        "message": "Pomiń konwersję strony kodowej OEM → Unicode dla nazw plików załączników. Włącz, jeśli nazwy plików wyglądają na zniekształcone."
     },
     "remove_winmail_dat_check.hint": {
-        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+        "message": "Ukryj surowy załącznik winmail.dat po wyodrębnieniu jego zawartości."
     },
     "strict_contenttype_check.hint": {
-        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef."
+        "message": "Przetwarzaj tylko załączniki o nazwie \"winmail.dat\" lub z typem zawartości application/ms-tnef. Wyłącz, aby przetwarzać wszystkie załączniki wyglądające na TNEF."
     },
     "enable_debug_check.hint": {
-        "message": "Write verbose [LookOut] messages to the browser console."
+        "message": "Zapisuj szczegółowe komunikaty [LookOut] w konsoli przeglądarki. Przydatne do diagnozowania problemów z analizą."
     },
     "tnef.info.prefix": {
-        "message": "What is TNEF? Learn more on the"
+        "message": "Czym jest TNEF? Dowiedz się więcej na"
     },
     "tnef.info.link": {
-        "message": "LookOut (Refactored) README"
+        "message": "stronie README LookOut (Refactored)"
     },
     "tnef.info.suffix": {
-        "message": "page."
+        "message": "."
     }
 }

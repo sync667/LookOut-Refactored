@@ -12,13 +12,13 @@
         "message": "MutasdMeg! beállítások"
     },
     "group.attachments": {
-        "message": "Attachment handling"
+        "message": "Mellékletkezelés"
     },
     "group.calendar": {
-        "message": "Calendar / Contacts"
+        "message": "Naptár / Névjegyek"
     },
     "group.advanced": {
-        "message": "Advanced / Debug"
+        "message": "Haladó / Hibakeresés"
     },
     "attach_raw_mapi_check.accesskey": {
         "message": "M"
@@ -27,7 +27,7 @@
         "message": "MAPI tulajdonságok tárolása"
     },
     "attach_raw_mapi_check.hint": {
-        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
+        "message": "Nyers MAPI-tulajdonságok szöveges kiíratásának csatolása a dekódolt fájlok mellé."
     },
     "direct_to_calendar_check.accesskey": {
         "message": "N"
@@ -36,7 +36,7 @@
         "message": "Naptáradatok közvetlen megnyitása"
     },
     "direct_to_calendar_check.hint": {
-        "message": "Automatically open calendar invitations and contact cards without saving them first."
+        "message": "Naptármeghívók és névjegykártyák automatikus megnyitása mentés nélkül."
     },
     "disable_filename_character_set_check.accesskey": {
         "message": "F"
@@ -45,7 +45,7 @@
         "message": "Fájlnév karaktertábla-konverziójának bénítása"
     },
     "disable_filename_character_set_check.hint": {
-        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames."
+        "message": "Az OEM kódlap → Unicode konverzió kihagyása a mellékletfájlneveknél. Kapcsolja be, ha a fájlnevek hibásan jelennek meg."
     },
     "remove_winmail_dat_check.accesskey": {
         "message": "W"
@@ -54,7 +54,7 @@
         "message": "Winmail.dat eltávolítása"
     },
     "remove_winmail_dat_check.hint": {
-        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+        "message": "A nyers winmail.dat melléklet elrejtése a tartalom kibontása után."
     },
     "strict_contenttype_check.accesskey": {
         "message": "t"
@@ -63,7 +63,7 @@
         "message": "Szigorú tartalomtípus-egyezés"
     },
     "strict_contenttype_check.hint": {
-        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef."
+        "message": "Csak a \"winmail.dat\" nevű vagy application/ms-tnef tartalomtípusú mellékletek feldolgozása. Tiltsa le, ha minden TNEF-nek tűnő mellékletet fel szeretne dolgozni."
     },
     "enable_debug_check.accesskey": {
         "message": "E"
@@ -72,16 +72,16 @@
         "message": "Engedélyezze a hibakeresést"
     },
     "enable_debug_check.hint": {
-        "message": "Write verbose [LookOut] messages to the browser console."
+        "message": "Részletes [LookOut] üzenetek írása a böngészőkonzolba. Hasznos az elemzési problémák diagnosztizálásához."
     },
     "tnef.info.prefix": {
-        "message": "What is TNEF? Learn more on the"
+        "message": "Mi az a TNEF? Tudjon meg többet a"
     },
     "tnef.info.link": {
         "message": "LookOut (Refactored) README"
     },
     "tnef.info.suffix": {
-        "message": "page."
+        "message": "oldalon."
     },
     "lookout.label": {
         "message": "A helyi menüpont"

@@ -1,3 +1,4 @@
+/* global i18n */
 import * as storage from "../scripts/storage.mjs";
 
 const USER_OPTIONS = [
@@ -11,8 +12,8 @@ const USER_OPTIONS = [
 
 
 async function update(event) {
-  let name = event.target.dataset.preference;
-  let value = event.target.checked;
+  const name = event.target.dataset.preference;
+  const value = event.target.checked;
   await browser.storage.local.set({ [name]: value })
 }
 
@@ -22,11 +23,11 @@ async function init() {
   document.documentElement.lang = browser.i18n.getUILanguage();
 
   i18n.updateDocument();
-  let prefs = await storage.getPrefs();
+  const prefs = await storage.getPrefs();
 
-  for (let name of USER_OPTIONS) {
-    let value = prefs[name]; 
-    let element = document.getElementById(`${name}_check`);
+  for (const name of USER_OPTIONS) {
+    const value = prefs[name]; 
+    const element = document.getElementById(`${name}_check`);
     element.checked = value;
     element.dataset.preference = name;
     element.addEventListener("change", update);

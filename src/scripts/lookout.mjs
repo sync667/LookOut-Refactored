@@ -71,7 +71,7 @@ export class TnefExtractor {
    * @param {number} length
    * @param {Date}   date
    */
-  onTnefFile(data, filename, content_type, length, date) {
+  onTnefFile(data, filename, content_type, _length, _date) {
     // Strip away path.
     filename = filename.split("\\").pop().split("/").pop();
 

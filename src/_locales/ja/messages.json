@@ -30,10 +30,10 @@
         "message": "LookOut (Refactored)"
     },
     "lookout.label": {
-        "message": "Your localized menuitem"
+        "message": "LookOut メニュー項目"
     },
     "pane1.title": {
-        "message": "LookOut preferences"
+        "message": "LookOutの設定"
     },
     "prefwindow.title": {
         "message": "LookOutの設定"
@@ -51,39 +51,39 @@
         "message": "厳密なメディアタイプ判定を実施する"
     },
     "group.attachments": {
-        "message": "Attachment handling"
+        "message": "添付ファイルの処理"
     },
     "group.calendar": {
-        "message": "Calendar / Contacts"
+        "message": "カレンダー / 連絡先"
     },
     "group.advanced": {
-        "message": "Advanced / Debug"
+        "message": "詳細設定 / デバッグ"
     },
     "attach_raw_mapi_check.hint": {
-        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
+        "message": "デコードされたファイルと一緒に、生のMAPIプロパティのテキストダンプを添付します。"
     },
     "direct_to_calendar_check.hint": {
-        "message": "Automatically open calendar invitations and contact cards without saving them first."
+        "message": "カレンダーの招待状や連絡先カードを保存せずに自動的に開きます。"
     },
     "disable_filename_character_set_check.hint": {
-        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames. Enable if filenames look garbled."
+        "message": "添付ファイル名のOEMコードページ → Unicode変換をスキップします。ファイル名が文字化けする場合に有効にしてください。"
     },
     "remove_winmail_dat_check.hint": {
-        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+        "message": "内容を抽出した後、元のwinmail.dat添付ファイルを非表示にします。"
     },
     "strict_contenttype_check.hint": {
-        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef."
+        "message": "「winmail.dat」という名前、またはcontent-typeがapplication/ms-tnefの添付ファイルのみを処理します。無効にすると、TNEFに見えるすべての添付ファイルを処理します。"
     },
     "enable_debug_check.hint": {
-        "message": "Write verbose [LookOut] messages to the browser console."
+        "message": "ブラウザコンソールに詳細な[LookOut]メッセージを出力します。解析の問題を診断するのに役立ちます。"
     },
     "tnef.info.prefix": {
-        "message": "What is TNEF? Learn more on the"
+        "message": "TNEFとは？詳しくは"
     },
     "tnef.info.link": {
-        "message": "LookOut (Refactored) README"
+        "message": "LookOut (Refactored) READMEページ"
     },
     "tnef.info.suffix": {
-        "message": "page."
+        "message": "をご覧ください。"
     }
 }

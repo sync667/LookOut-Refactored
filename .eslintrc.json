@@ -4,12 +4,26 @@
     "es2022": true,
     "webextensions": true
   },
+  "globals": {
+    "ChromeUtils": "readonly",
+    "Cu": "readonly",
+    "Cc": "readonly",
+    "Ci": "readonly",
+    "IOUtils": "readonly",
+    "PathUtils": "readonly",
+    "browser": "readonly",
+    "messenger": "readonly",
+    "ExtensionCommon": "readonly",
+    "Services": "readonly",
+    "Components": "readonly",
+    "MailServices": "readonly"
+  },
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module"
   },
   "rules": {
-    "no-unused-vars": "warn",
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
     "no-undef": "warn",
     "prefer-const": "warn",
     "eqeqeq": ["warn", "always"],

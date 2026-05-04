@@ -12,25 +12,86 @@
  */
 
 import { createLogger } from "/scripts/logger.mjs";
+import {
+  mattr_name_to_string,
+  mattr_type_to_string,
+  MAPI_UNSPECIFIED,
+  MAPI_NULL,
+  MAPI_SHORT,
+  MAPI_INT,
+  MAPI_FLOAT,
+  MAPI_DOUBLE,
+  MAPI_CURRENCY,
+  MAPI_APPTIME,
+  MAPI_ERROR,
+  MAPI_BOOLEAN,
+  MAPI_OBJECT,
+  MAPI_INT64,
+  MAPI_STRING,
+  MAPI_UNICODE_STRING,
+  MAPI_SYSTIME,
+  MAPI_CLSID,
+  MAPI_BINARY,
+  MAPI_ATTACH_DATA_OBJ,
+  MAPI_ATTACH_LONG_FILENAME,
+  MAPI_ATTACH_MIME_TAG,
+  MAPI_BODY_HTML,
+  MAPI_RTF_COMPRESSED,
+  MAPI_SENDER_SEARCH_KEY,
+  MAPI_SENDER_NAME,
+  MAPI_SENDER_EMAIL_ADDRESS,
+  MAPI_APPOINTMENT_ORGANIZER_ALIAS,
+  MAPI_COMPANY_NAME,
+  MAPI_TITLE,
+  MAPI_CONTACT_BUSINESS_PHONE,
+  MAPI_CONTACT_HOME_PHONE,
+  MAPI_CONTACT_PRIMARY_PHONE,
+  MAPI_CONTACT_BUSINESS_PHONE_2,
+  MAPI_CONTACT_OTHER_PHONE,
+  MAPI_CONTACT_MOBILE_PHONE,
+  MAPI_CONTACT_BUSINESS_FAX,
+  MAPI_MEETING_CLEAN_GLOBAL_OBJECT_ID,
+  MAPI_MEETING_GLOBAL_OBJECT_ID,
+  MAPI_MAPPING_SIGNATURE,
+  MAPI_APPOINTMENT_SEQUENCE,
+  MAPI_PRIMARY_SEND_ACCOUNT,
+  MAPI_CREATOR_NAME,
+  MAPI_TASK_F_CREATOR,
+  MAPI_APPOINTMENT_REQUIRED_ATTENDEES,
+  MAPI_MEETING_REQUIRED_ATTENDEES,
+  MAPI_APPOINTMENT_OPTIONAL_ATTENDEES,
+  MAPI_MEETING_OPTIONAL_ATTENDEES,
+  MAPI_CONVERSATION_TOPIC,
+  MAPI_APPOINTMENT_LOCATION,
+  MAPI_START_DATE,
+  MAPI_APPOINTMENT_START_WHOLE,
+  MAPI_APPOINTMENT_START_DATE,
+  MAPI_END_DATE,
+  MAPI_APPOINTMENT_END_WHOLE,
+  MAPI_APPOINTMENT_END_DATE,
+  MAPI_CREATION_TIME,
+  MAPI_APPOINTMENT_SEQUENCE_TIME,
+  MAPI_APPOINTMENT_RECUR,
+} from "/scripts/mapi_props.mjs";
 
 let _log = createLogger(5);
 let prefs;
 
-var LVL_MESSAGE = 0x1;
-var LVL_ATTACHMENT = 0x2;
+const LVL_MESSAGE = 0x1;
+const LVL_ATTACHMENT = 0x2;
 
 // ---------- Tnef Types ----------
 
-var TNEF_TRIPLES = 0x0000; //   triples
-var TNEF_STRING = 0x0001; //   string
-var TNEF_TEXT = 0x0002; //   text
-var TNEF_DATE = 0x0003; //   date
-var TNEF_SHORT = 0x0004; //   short
-var TNEF_LONG = 0x0005; //   long
-var TNEF_BYTE = 0x0006; //   byte
-var TNEF_WORD = 0x0007; //   word
-var TNEF_DWORD = 0x0008; //   dword
-var TNEF_TYPE_MAX = 0x0009; //   max
+const TNEF_TRIPLES = 0x0000; //   triples
+const TNEF_STRING = 0x0001; //   string
+const TNEF_TEXT = 0x0002; //   text
+const TNEF_DATE = 0x0003; //   date
+const TNEF_SHORT = 0x0004; //   short
+const TNEF_LONG = 0x0005; //   long
+const TNEF_BYTE = 0x0006; //   byte
+const TNEF_WORD = 0x0007; //   word
+const TNEF_DWORD = 0x0008; //   dword
+const _TNEF_TYPE_MAX = 0x0009; //   max // eslint-disable-line no-unused-vars
 
 function tnef_attr_type_to_string(attr_type) {
   switch (attr_type) {
@@ -50,38 +111,38 @@ function tnef_attr_type_to_string(attr_type) {
 // ---------- Tnef Names -----------
 
 // names of all attributes found in TNEF file
-var TNEF_ATTR_OWNER = 0x0000; //  Owner
-var TNEF_ATTR_SENTFOR = 0x0001; //  Sent For
-var TNEF_ATTR_DELEGATE = 0x0002; //  Delegate
-var TNEF_ATTR_DATE_START = 0x0006; //  Date Start
-var TNEF_ATTR_DATE_END = 0x0007; //  Date End
-var TNEF_ATTR_APPT_ID_OWNER = 0x0008; //  Owner Appointment ID
-var TNEF_ATTR_REQUEST_RESP = 0x0009; //  Response Requested.
-var TNEF_ATTR_FROM = 0x8000; //  From
-var TNEF_ATTR_SUBJECT = 0x8004; //  Subject
-var TNEF_ATTR_DATE_SENT = 0x8005; //  Date Sent
-var TNEF_ATTR_DATE_RECD = 0x8006; //  Date Received
-var TNEF_ATTR_MESSAGE_STATUS = 0x8007; //  Message Status
-var TNEF_ATTR_MESSAGE_CLASS = 0x8008; //  Message Class
-var TNEF_ATTR_MESSAGE_ID = 0x8009; //  Message ID
-var TNEF_ATTR_PARENT_ID = 0x800a; //  Parent ID
-var TNEF_ATTR_CONVERSATION_ID = 0x800b; //  Conversation ID
-var TNEF_ATTR_BODY = 0x800c; //  Body
-var TNEF_ATTR_PRIORITY = 0x800d; //  Priority
-var TNEF_ATTR_ATTACH_DATA = 0x800f; //  Attachment Data
-var TNEF_ATTR_ATTACH_TITLE = 0x8010; //  Attachment File Name
-var TNEF_ATTR_ATTACH_METAFILE = 0x8011; //  Attachment Meta File
-var TNEF_ATTR_ATTACH_CREATE_DATE = 0x8012; //  Attachment Creation Date
-var TNEF_ATTR_ATTACH_MODIFY_DATE = 0x8013; //  Attachment Modification Date
-var TNEF_ATTR_DATE_MODIFY = 0x8020; //  Date Modified
-var TNEF_ATTR_ATTACH_TRANSPORT_FILENAME = 0x9001; //  Attachment Transport Filename
-var TNEF_ATTR_ATTACH_REND_DATA = 0x9002; //  Attachment Rendering Data
-var TNEF_ATTR_MAPI_PROPS = 0x9003; //  MAPI Properties
-var TNEF_ATTR_RECIPTABLE = 0x9004; //  Recipients
-var TNEF_ATTR_ATTACHMENT = 0x9005; //  Attachment
-var TNEF_ATTR_TNEF_VERSION = 0x9006; //  TNEF Version
-var TNEF_ATTR_OEM_CODEPAGE = 0x9007; //  OEM Codepage
-var TNEF_ATTR_ORIGNINAL_MESSAGE_CLASS = 0x9008; //  Original Message Class
+const TNEF_ATTR_OWNER = 0x0000; //  Owner
+const TNEF_ATTR_SENTFOR = 0x0001; //  Sent For
+const TNEF_ATTR_DELEGATE = 0x0002; //  Delegate
+const TNEF_ATTR_DATE_START = 0x0006; //  Date Start
+const TNEF_ATTR_DATE_END = 0x0007; //  Date End
+const TNEF_ATTR_APPT_ID_OWNER = 0x0008; //  Owner Appointment ID
+const TNEF_ATTR_REQUEST_RESP = 0x0009; //  Response Requested.
+const TNEF_ATTR_FROM = 0x8000; //  From
+const TNEF_ATTR_SUBJECT = 0x8004; //  Subject
+const TNEF_ATTR_DATE_SENT = 0x8005; //  Date Sent
+const TNEF_ATTR_DATE_RECD = 0x8006; //  Date Received
+const TNEF_ATTR_MESSAGE_STATUS = 0x8007; //  Message Status
+const TNEF_ATTR_MESSAGE_CLASS = 0x8008; //  Message Class
+const TNEF_ATTR_MESSAGE_ID = 0x8009; //  Message ID
+const TNEF_ATTR_PARENT_ID = 0x800a; //  Parent ID
+const TNEF_ATTR_CONVERSATION_ID = 0x800b; //  Conversation ID
+const TNEF_ATTR_BODY = 0x800c; //  Body
+const TNEF_ATTR_PRIORITY = 0x800d; //  Priority
+const TNEF_ATTR_ATTACH_DATA = 0x800f; //  Attachment Data
+const TNEF_ATTR_ATTACH_TITLE = 0x8010; //  Attachment File Name
+const TNEF_ATTR_ATTACH_METAFILE = 0x8011; //  Attachment Meta File
+const TNEF_ATTR_ATTACH_CREATE_DATE = 0x8012; //  Attachment Creation Date
+const TNEF_ATTR_ATTACH_MODIFY_DATE = 0x8013; //  Attachment Modification Date
+const TNEF_ATTR_DATE_MODIFY = 0x8020; //  Date Modified
+const TNEF_ATTR_ATTACH_TRANSPORT_FILENAME = 0x9001; //  Attachment Transport Filename
+const TNEF_ATTR_ATTACH_REND_DATA = 0x9002; //  Attachment Rendering Data
+const TNEF_ATTR_MAPI_PROPS = 0x9003; //  MAPI Properties
+const TNEF_ATTR_RECIPTABLE = 0x9004; //  Recipients
+const TNEF_ATTR_ATTACHMENT = 0x9005; //  Attachment
+const TNEF_ATTR_TNEF_VERSION = 0x9006; //  TNEF Version
+const TNEF_ATTR_OEM_CODEPAGE = 0x9007; //  OEM Codepage
+const TNEF_ATTR_ORIGNINAL_MESSAGE_CLASS = 0x9008; //  Original Message Class
 
 function tnef_attr_name_to_string(attr_name) {
   switch (attr_name) {
@@ -140,13 +201,13 @@ function GETINT64(p, i) {
   if (arguments.length < 2)
     i = 0;
 
-  var val = 0;
+  let val = 0;
 
-  if (typeof (p) == "string") {
-    for (var j = 7; j >= 0; j--)
+  if (typeof (p) === "string") {
+    for (let j = 7; j >= 0; j--)
       val = val * 256 + p.charCodeAt(i + j);
   } else {
-    for (var j = 7; j >= 0; j--)
+    for (let j = 7; j >= 0; j--)
       val = val * 256 + p[i + j];
   }
   return (val);
@@ -155,7 +216,7 @@ function GETINT64(p, i) {
 function GETINT32(p, i) {
   if (arguments.length < 2)
     i = 0;
-  if (typeof (p) == "string")
+  if (typeof (p) === "string")
     return (((p.charCodeAt(i + 3) * 256 + p.charCodeAt(i + 2)) * 256 + p.charCodeAt(i + 1)) * 256 + p.charCodeAt(i));
   else
     return (((p[i + 3] * 256 + p[i + 2]) * 256 + p[i + 1]) * 256 + p[i]);
@@ -164,20 +225,20 @@ function GETINT32(p, i) {
 function GETINT16(p, i) {
   if (arguments.length < 2)
     i = 0;
-  if (typeof (p) == "string")
+  if (typeof (p) === "string")
     return (p.charCodeAt(i) + p.charCodeAt(i + 1) * 256);
   else
     return (p[i] + p[i + 1] * 256);
 }
 
 function GETUTF16(p, i, num_chars) {
-  var utf16_str = "";
+  let utf16_str = "";
 
   if (arguments.length < 2)
     i = 0;
   if (arguments.length < 3 || num_chars < 1)
     num_chars = 1;
-  if (typeof (p) == "string") {
+  if (typeof (p) === "string") {
     while (num_chars--) {
       utf16_str += String.fromCharCode(p.charCodeAt(i) + p.charCodeAt(i + 1) * 256);
       i += 2;
@@ -194,7 +255,7 @@ function GETUTF16(p, i, num_chars) {
 
 
 function ntoa_pad(x, len, pad) {
-  var str = "" + x;
+  let str = "" + x;
 
   if (arguments.length < 3 || pad.length < 1)
     pad = "0";
@@ -208,9 +269,9 @@ function ntoa_pad(x, len, pad) {
 
 
 function to_hex(x, len) {
-  var range = "0123456789abcdef";
-  var tmp = Math.floor(x);
-  var hex = "";
+  const range = "0123456789abcdef";
+  let tmp = Math.floor(x);
+  let hex = "";
 
   len = len * 2;
 
@@ -230,17 +291,17 @@ function GETFLT32(p, i) {
   if (arguments.length < 2)
     i = 0;
 
-  var bin = typeof (p) == "string" ? [p.charCodeAt(i), p.charCodeAt(i + 1),
+  const bin = typeof (p) === "string" ? [p.charCodeAt(i), p.charCodeAt(i + 1),
   p.charCodeAt(i + 2), p.charCodeAt(i + 3)] : p.slice(i, i + 4);
-  var precision_bits = 23, bias = 127; // IEEE754 Float
-  var signal = 0x80 & bin[3], exponent = ((0xEF & bin[3]) << 1) + ((0x80 & bin[2]) >> 7);
-  var significand = 0, divisor = 0.5, byte_idx = 2, start_bit, mask;
+  let precision_bits = 23; // IEEE754 Float (bias = 127)
+  const signal = 0x80 & bin[3], exponent = ((0xEF & bin[3]) << 1) + ((0x80 & bin[2]) >> 7);
+  let significand = 0, divisor = 0.5, byte_idx = 2, start_bit, mask;
 
   do {
     start_bit = precision_bits % 8 || 8;
     mask = 1 << start_bit;
     while (mask >>= 1) {
-      if ((bin[byte_idx] & mask) != 0)
+      if ((bin[byte_idx] & mask) !== 0)
         significand += divisor;
       divisor *= 0.5;
     }
@@ -248,7 +309,7 @@ function GETFLT32(p, i) {
     byte_idx--;
   } while (precision_bits);
 
-  if (exponent == 255) // IEEE754 Float ((bias << 1) + 1)
+  if (exponent === 255) // IEEE754 Float ((bias << 1) + 1)
     return (significand ? NaN : signal ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY);
   else if (exponent && significand)
     return ((1 + signal * -2) * Math.pow(2, exponent - 127) * (1 + significand));
@@ -264,19 +325,19 @@ function GETDBL64(p, i) {
   if (arguments.length < 2)
     i = 0;
 
-  var bin = typeof (p) == "string" ? [p.charCodeAt(i), p.charCodeAt(i + 1),
+  const bin = typeof (p) === "string" ? [p.charCodeAt(i), p.charCodeAt(i + 1),
   p.charCodeAt(i + 2), p.charCodeAt(i + 3),
   p.charCodeAt(i + 4), p.charCodeAt(i + 5),
   p.charCodeAt(i + 6), p.charCodeAt(i + 7)] : p.slice(i, i + 8);
-  var precision_bits = 52, bias = 1023; // IEEE754 Double
-  var signal = 0x80 & bin[7], exponent = ((0xEF & bin[7]) << 4) + ((0xF0 & bin[6]) >> 4);
-  var significand = 0, divisor = 0.5, byte_idx = 6, start_bit, mask;
+  let precision_bits = 52; // IEEE754 Double (bias = 1023)
+  const signal = 0x80 & bin[7], exponent = ((0xEF & bin[7]) << 4) + ((0xF0 & bin[6]) >> 4);
+  let significand = 0, divisor = 0.5, byte_idx = 6, start_bit, mask;
 
   do {
     start_bit = precision_bits % 8 || 8;
     mask = 1 << start_bit;
     while (mask >>= 1) {
-      if ((bin[byte_idx] & mask) != 0)
+      if ((bin[byte_idx] & mask) !== 0)
         significand += divisor;
       divisor *= 0.5;
     }
@@ -284,7 +345,7 @@ function GETDBL64(p, i) {
     byte_idx--;
   } while (precision_bits);
 
-  if (exponent == 2047) // IEEE754 Double ((bias << 1) + 1)
+  if (exponent === 2047) // IEEE754 Double ((bias << 1) + 1)
     return (significand ? NaN : signal ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY);
   else if (exponent && significand)
     return ((1 + signal * -2) * Math.pow(2, exponent - 1023) * (1 + significand));
@@ -296,7 +357,7 @@ function GETDBL64(p, i) {
 
 
 function tnef_base64_encode(str) {
-  var data = "", chr1, chr2, chr3, enc1, enc2, enc3, enc4, i = 0;
+  let data = "", chr1, chr2, chr3, enc1, enc2, enc3, enc4, i = 0;
   const key_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
   do {
@@ -334,13 +395,13 @@ TnefFile.prototype = {
 }
 
 function tnef_file_name_used(fname, files) {
-  var i = 0;
+  let i = 0;
 
   if (!files)
     return (0);
 
   for (i = 0; i < files.length; i++)
-    if (files[i].name == fname)
+    if (files[i].name === fname)
       return (1);
   return (0);
 }
@@ -369,11 +430,11 @@ function tnef_codepage_to_charset(cp) {
 }
 
 function tnef_file_munge_fname(fname, files, code_page) {
-  var file = null;
-  var count = 0;
+  let file = null;
+  let count = 0;
 
   // If we were not given a filename make one up
-  if (!fname || fname.length == 0) {
+  if (!fname || fname.length === 0) {
     //debug_print( "No file name specified, using default.\n" );
     fname = "tnef-part-";
     do {
@@ -383,12 +444,12 @@ function tnef_file_munge_fname(fname, files, code_page) {
   } else if (prefs["disable_filename_character_set"]) {
     file = fname;
   } else {
-    let charset = tnef_codepage_to_charset(code_page);
+    const charset = tnef_codepage_to_charset(code_page);
     tnef_log_msg("Lookout: convert file name from charset: " + charset, 7);
-    if (charset != null) {
+    if (charset !== null) {
       try {
-        let decoder = new TextDecoder(charset);
-        var fname2 = decoder.decode(new Uint8Array(fname.split('').map(function (cur_char) { return cur_char.charCodeAt(0); })));
+        const decoder = new TextDecoder(charset);
+        const fname2 = decoder.decode(new Uint8Array(fname.split('').map(function (cur_char) { return cur_char.charCodeAt(0); })));
         try {
           decodeURIComponent(escape(fname2));
         } catch (e) {
@@ -432,7 +493,7 @@ function tnef_file_notify(file, listener, is_final) {
 
 
 function tnef_file_add_mapi_attrs(file, files, pkg, attrs) {
-  var i = 0;
+  let i = 0;
 
   for (i = 0; attrs[i]; i++) {
     if (attrs[i].num_values) {
@@ -469,7 +530,7 @@ function tnef_file_add_attr(file, files, attr, pkg, listener) {
       break;
 
     case TNEF_ATTR_ATTACHMENT:
-      var mapi_attrs = mapi_attr_read(attr.buf, attr.len);
+      let mapi_attrs = mapi_attr_read(attr.buf, attr.len);
       if (mapi_attrs) {
         if (prefs["attach_raw_mapi"]) {
           tnef_pack_handle_mapi_attrs(pkg, mapi_attrs, listener);
@@ -504,8 +565,8 @@ function tnef_date_parse(buf) {
 
 // ---------- Tnef Attr ----------
 
-var MINIMUM_ATTR_LENGTH = 14; // 72
-var tnef_byte_pos = 0;
+const MINIMUM_ATTR_LENGTH = 14; // 72
+let tnef_byte_pos = 0;
 
 // Object types
 function TRP() {
@@ -541,7 +602,7 @@ TnefAttr.prototype = {
 // Copy the date data from the attribute into a struct date
 function tnef_attr_parse_date(attr) {
   assert(attr);
-  assert(attr.type == TNEF_DATE);
+  assert(attr.type === TNEF_DATE);
   assert(attr.len >= 14);
 
   return (tnef_date_parse(attr.buf));
@@ -550,28 +611,28 @@ function tnef_attr_parse_date(attr) {
 // Validate the checksum against attr.  The checksum is the sum of all the
 //   bytes in the attribute data modulo 65536
 function tnef_attr_check_checksum(attr, checksum) {
-  var i, sum = 0;
+  let i, sum = 0;
 
   for (i = 0; i < attr.len; i++)
     sum += attr.buf.charCodeAt(i);
 
   sum &= 0xFFFF;
 
-  tnef_log_msg("checksum = " + checksum + "  sum = " + sum, sum != checksum ? 3 : 8);
+  tnef_log_msg("checksum = " + checksum + "  sum = " + sum, sum !== checksum ? 3 : 8);
 
-  return (sum == checksum);
+  return (sum === checksum);
 }
 
 
 function tnef_attr_incomplete(attr) {
   assert(attr);
 
-  return (attr.len >= 0 && !(attr.buf && attr.buf.length == attr.len));
+  return (attr.len >= 0 && !(attr.buf && attr.buf.length === attr.len));
 }
 
 
 function tnef_attr_read(instrm, prev_attr) {
-  var attr = null;
+  let attr = null;
 
   if (prev_attr) {
     attr = prev_attr;
@@ -579,7 +640,7 @@ function tnef_attr_read(instrm, prev_attr) {
     attr = new TnefAttr();
 
     attr.lvl_type = instrm.read8();
-    assert(attr.lvl_type == LVL_MESSAGE || attr.lvl_type == LVL_ATTACHMENT);
+    assert(attr.lvl_type === LVL_MESSAGE || attr.lvl_type === LVL_ATTACHMENT);
 
     attr.name = GETINT16(instrm.readByteArray(2));
     attr.type = GETINT16(instrm.readByteArray(2));
@@ -596,9 +657,9 @@ function tnef_attr_read(instrm, prev_attr) {
     + ",  pos in TNEF: " + (tnef_byte_pos - 9)
     , 15);  //MKA 6
 
-  var available = instrm.available();
+  const available = instrm.available();
   if (available > 0) {
-    var togo = 0;
+    let togo = 0;
     if (attr.buf) {
       togo = attr.len - attr.buf.length;
     } else {
@@ -611,8 +672,8 @@ function tnef_attr_read(instrm, prev_attr) {
     attr.buf += instrm.readBytes(togo);
     tnef_byte_pos += togo;
 
-    if (attr.buf.length == attr.len) {
-      var checksum = GETINT16(instrm.readByteArray(2));
+    if (attr.buf.length === attr.len) {
+      const checksum = GETINT16(instrm.readByteArray(2));
       tnef_byte_pos += 2;
       if (!tnef_attr_check_checksum(attr, checksum)) {
         tnef_log_msg("LookOut: TNEF attribute has invalid checksum, message may be corrupt\n", 5);
@@ -631,8 +692,8 @@ function tnef_attr_read(instrm, prev_attr) {
 
 // ---------- MAPI -----------
 
-var MULTI_VALUE_FLAG = 0x1000;
-var GUID_EXISTS_FLAG = 0x8000;
+const MULTI_VALUE_FLAG = 0x1000;
+const GUID_EXISTS_FLAG = 0x8000;
 
 function GUID() {
 }
@@ -662,25 +723,25 @@ function pad_to_4byte(x) {
 }
 
 function guid_parse_buf(buf, idx) {
-  var guid = new GUID();
+  const guid = new GUID();
 
   assert(buf);
 
   guid.data1 = GETINT32(buf, idx);
   guid.data2 = GETINT16(buf, idx + 4);
   guid.data3 = GETINT16(buf, idx + 6);
-  for (var i = 0; i < 8; i++)
+  for (let i = 0; i < 8; i++)
     guid.data4[i] = buf[idx + 8 + i];
 
   return (guid);
 }
 
 // parses out the MAPI attibutes hidden in the character buffer
-function mapi_attr_read(buf, len) {
-  var idx = 0;
-  var i = 0;
-  var num_properties = GETINT32(buf, idx);
-  var mattrs = Array(num_properties + 1);
+function mapi_attr_read(buf, _len) {
+  let idx = 0;
+  let i = 0;
+  const num_properties = GETINT32(buf, idx);
+  const mattrs = Array(num_properties + 1);
 
   idx += 4;
 
@@ -706,12 +767,12 @@ function mapi_attr_read(buf, len) {
       idx += 4;
       if (mattrs[i].num_names > 0) {
         // FIXME: do something useful here!
-        var i2 = 0;
+        let i2 = 0;
 
         mattrs[i].names = Array(mattrs[i].num_names);
 
         for (i2 = 0; i2 < mattrs[i].num_names; i2++) {
-          var name_len = GETINT32(buf, idx);
+          const name_len = GETINT32(buf, idx);
           idx += 4;
 
           // read the data into a buffer
@@ -788,16 +849,16 @@ function mapi_attr_read(buf, len) {
         mattrs[i].num_values = GETINT32(buf, idx);
         idx += 4;
         mattrs[i].values = new Array(mattrs[i].num_values);
-        for (var val_idx = 0; val_idx < mattrs[i].num_values; val_idx++) {
-          var val_len = GETINT32(buf, idx);
+        for (let val_idx = 0; val_idx < mattrs[i].num_values; val_idx++) {
+          const val_len = GETINT32(buf, idx);
           idx += 4;
 
-          //if( mattrs[i].name == MAPI_STRING ) // name ?
+          //if( mattrs[i].name === MAPI_STRING ) // name ?
           //  val_len--; // kill c style string terminator
 
-          if (mattrs[i].type == MAPI_UNICODE_STRING) {
+          if (mattrs[i].type === MAPI_UNICODE_STRING) {
             mattrs[i].values[val_idx] = GETUTF16(buf, idx, (val_len - 1) >> 1);
-          } else if (mattrs[i].type == MAPI_STRING) {// name ?
+          } else if (mattrs[i].type === MAPI_STRING) {// name ?
             mattrs[i].values[val_idx] = buf.substr(idx, val_len - 1); // - 1 to kill c style string terminator
           } else {
             mattrs[i].values[val_idx] = buf.substr(idx, val_len); // this may not be right, substr may react to '\0'.
@@ -816,12 +877,12 @@ function mapi_attr_read(buf, len) {
 }
 
 function mapi_attr_find(mattrs, name_id) {
-  var i;
+  let i;
 
   if (!mattrs)
     return (null);
 
-  for (i = 0; mattrs[i] && mattrs[i].name != name_id; i++);
+  for (i = 0; mattrs[i] && mattrs[i].name !== name_id; i++);
   if (mattrs[i]) {
 
     return (mattrs[i]);
@@ -831,46 +892,41 @@ function mapi_attr_find(mattrs, name_id) {
 
 // ---------- RTF -----------
 
-var rtf_uncompressed_magic = 0x414c454d;
-var rtf_compressed_magic = 0x75465a4c;
-var rtf_prebuf = String("{\\rtf1\\ansi\\mac\\deff0\\deftab720{\\fonttbl;}{\\f0\\fnil \\froman \\fswiss \\fmodern \\fscript \\fdecor MS Sans SerifSymbolArialTimes New RomanCourier{\\colortbl\\red0\\green0\\blue0\r\n\\par \\pard\\plain\\f0\\fs20\\b\\i\\u\\tab\\tx");
+const rtf_uncompressed_magic = 0x414c454d;
+const rtf_compressed_magic = 0x75465a4c;
+const rtf_prebuf = String("{\\rtf1\\ansi\\mac\\deff0\\deftab720{\\fonttbl;}{\\f0\\fnil \\froman \\fswiss \\fmodern \\fscript \\fdecor MS Sans SerifSymbolArialTimes New RomanCourier{\\colortbl\\red0\\green0\\blue0\r\n\\par \\pard\\plain\\f0\\fs20\\b\\i\\u\\tab\\tx");
 
 
 function is_rtf_data(data) {
-  var compr_size = 0;
-  var uncompr_size = 0;
-  var magic;
-  var idx = 0;
+  let idx = 0;
 
-  compr_size = GETINT32(data, idx);
+  // Skip compr_size and uncompr_size (each 4 bytes)
   idx += 4;
-  uncompr_size = GETINT32(data, idx);
   idx += 4;
-  magic = GETINT32(data, idx);
-  idx += 4;
+  const magic = GETINT32(data, idx);
 
-  if (magic == rtf_uncompressed_magic || magic == rtf_compressed_magic)
+  if (magic === rtf_uncompressed_magic || magic === rtf_compressed_magic)
     return 1;
   return 0;
 }
 
 function decompress_rtf_data(src, len) {
   const rtf_prebuf_len = rtf_prebuf.length;
-  var numin = 0;
-  var numout = 0;
-  var flag_count = 0;
-  var flags = 0;
-  var dest = new String(""); // size is rtf_prebuf_len + len;
+  let numin = 0;
+  let numout = 0;
+  let flag_count = 0;
+  let flags = 0;
+  let dest = new String(""); // size is rtf_prebuf_len + len;
 
   dest += rtf_prebuf;
 
   numout = rtf_prebuf_len;
   while (numout < len + rtf_prebuf_len) {
     // each flag byte flags 8 literals/references, 1 per bit
-    flags = ((flag_count++ % 8) == 0) ? src.charCodeAt(numin++) : (flags >> 1);
-    if ((flags & 1) == 1) {	// 1 == reference
-      var offset = src.charCodeAt(numin);
-      var length = src.charCodeAt(numin + 1);
+    flags = ((flag_count++ % 8) === 0) ? src.charCodeAt(numin++) : (flags >> 1);
+    if ((flags & 1) === 1) {	// 1 === reference
+      let offset = src.charCodeAt(numin);
+      let length = src.charCodeAt(numin + 1);
       numin += 2;
 
       // offset relative to block start
@@ -888,12 +944,12 @@ function decompress_rtf_data(src, len) {
       if (offset >= numout)
         offset -= 4096; // from previous block
 
-      var end = offset + length;
+      const end = offset + length;
       while (offset < end) {
         dest += dest.charAt(offset);
         offset++;
       }
-    } else {		// 0 == literal
+    } else {		// 0 === literal
       if (numin < src.length)
         dest += src.charAt(numin++);
       else
@@ -907,34 +963,28 @@ function decompress_rtf_data(src, len) {
 
 
 function rtf_data_parse(data, len) {
-  var out_data = null;
-  var out_len = 0;
-  var compr_size = 0;
-  var uncompr_size = 0;
-  var magic;
-  var checksum;
-  var idx = 0;
+  let out_data = null;
+  let idx = 0;
 
-  compr_size = GETINT32(data, idx);
+  const compr_size = GETINT32(data, idx);
   idx += 4;
-  uncompr_size = GETINT32(data, idx);
+  const uncompr_size = GETINT32(data, idx);
   idx += 4;
-  magic = GETINT32(data, idx);
+  const magic = GETINT32(data, idx);
   idx += 4;
-  checksum = GETINT32(data, idx);
+  // skip checksum (4 bytes)
   idx += 4;
 
   // sanity check
-  assert(compr_size + 4 == len);
-  if (compr_size + 4 != len) {
+  assert(compr_size + 4 === len);
+  if (compr_size + 4 !== len) {
     tnef_log_msg("size does not match: got " + (compr_size + 4) + ", expected: " + len, 5);
     return null;
   }
-  out_len = uncompr_size;
 
-  if (magic == rtf_uncompressed_magic) // uncompressed rtf stream
+  if (magic === rtf_uncompressed_magic) // uncompressed rtf stream
     out_data = data.slice(4, 4 + uncompr_size - 1);
-  else if (magic == rtf_compressed_magic) // compressed rtf stream
+  else if (magic === rtf_compressed_magic) // compressed rtf stream
     out_data = decompress_rtf_data(data.slice(idx, idx + compr_size - 1), uncompr_size);
 
   return (out_data);
@@ -942,12 +992,12 @@ function rtf_data_parse(data, len) {
 
 
 function rtf_to_escaped_text(rtf_data) {
-  var is_str = typeof (rtf_data) == "string";
-  var index, cur_char, in_escape = false, in_par = false, target;
-  var block_depth = 0;
-  var text = "";
+  const is_str = typeof (rtf_data) === "string";
+  let index, cur_char, in_escape = false;
+  let block_depth = 0;
+  let text = "";
 
-  target = rtf_data.indexOf("When");
+  const target = rtf_data.indexOf("When");
   index = rtf_data.indexOf("\\pard\\plain");
   if (index < 0)
     index = 0;
@@ -957,29 +1007,29 @@ function rtf_to_escaped_text(rtf_data) {
     else
       cur_char = rtf_data[index];
 
-    if (cur_char == '}') {
+    if (cur_char === '}') {
       block_depth--;
       in_escape = false;
-    } else if (cur_char == '{') {
+    } else if (cur_char === '{') {
       block_depth++;
     } else {
-      if (cur_char == '\\')
+      if (cur_char === '\\')
         in_escape = true;
       else if (in_escape && " \t\n\r".indexOf(cur_char) >= 0)
         in_escape = false;
 
-      if (index == target)
+      if (index === target)
         tnef_log_msg("found target block_depth = " + block_depth + ", in_escape = " + in_escape, 7);
-      if (block_depth == 1 && !in_escape) {
-        if (cur_char == '\n') {
+      if (block_depth === 1 && !in_escape) {
+        if (cur_char === '\n') {
           text += "\\n";
-        } else if (cur_char == '\r') {
+        } else if (cur_char === '\r') {
           // intentionally empty
-        } else if (cur_char == ';') {
+        } else if (cur_char === ';') {
           text += "\\;";
-        } else if (cur_char == ',') {
+        } else if (cur_char === ',') {
           text += "\\,";
-        } else if (cur_char == '\\') {
+        } else if (cur_char === '\\') {
           text += "\\";
         } else {
           text += cur_char;
@@ -1000,14 +1050,14 @@ function rtf_to_escaped_text(rtf_data) {
 //static size_t filesize;
 
 /* TNEF signature.  Equivalent to the magic cookie for a TNEF file. */
-var TNEF_SIGNATURE = 0x223e9f78;
+const TNEF_SIGNATURE = 0x223e9f78;
 
 
 function TnefListenerInterface() {
 }
 TnefListenerInterface.prototype = {
-  onTnefStart: function (filename, content_type, length, date) { },
-  onTnefData: function (position, data) { },
+  onTnefStart: function (_filename, _content_type, _length, _date) { },
+  onTnefData: function (_position, _data) { },
   onTnefEnd: function () { }
 }
 
@@ -1025,15 +1075,15 @@ TnefPackage.prototype = {
 }
 
 //MessageBodyTypes {
-var MSG_TEXT = 't';
-var MSG_HTML = 'h';
-var MSG_RTF = 'r';
-var MSG_ICAL = 'i';
-var MSG_VCARD = 'v';
+const _MSG_TEXT = 't'; // eslint-disable-line no-unused-vars
+const _MSG_HTML = 'h'; // eslint-disable-line no-unused-vars
+const _MSG_RTF = 'r'; // eslint-disable-line no-unused-vars
+const _MSG_ICAL = 'i'; // eslint-disable-line no-unused-vars
+const _MSG_VCARD = 'v'; // eslint-disable-line no-unused-vars
 //}
 
 function strtrim(str) {
-  var match = (str ? '' + str : '').match(/\S+(\s+\S+)*/);
+  const match = (str ? '' + str : '').match(/\S+(\s+\S+)*/);
   return (match && match.length > 0 ? match[0] : '');
 }
 
@@ -1044,13 +1094,14 @@ function strtrim(str) {
 // This is needed because nsIMsgHeaderParser cannot handle the commas MS allows
 // in the phrase and hangs if the email is invalid
 function decompose_rfc822_address(address) {
-  var re = new RegExp("@");
+  const re = new RegExp("@");
+  let parts;
   if (!re.test(address)) { // no email address so this is just a phrase
     tnef_log_msg("TNEF: Not an address: " + address, 6);
     parts = [address, ""];
   } else {
     // allowing comma in phrase for MS
-    var parts = address.match(/^\s*((?:[^\x28\x29\x3c\x3e\x40\x3a\x3b\x5b\x5c\x5d]+|\x22[^\x22]*\x22)*)[\x3c\x28]([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6})[\x29\x3e]\s*$/i);
+    parts = address.match(/^\s*((?:[^\x28\x29\x3c\x3e\x40\x3a\x3b\x5b\x5c\x5d]+|\x22[^\x22]*\x22)*)[\x3c\x28]([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6})[\x29\x3e]\s*$/i);
     if (!parts) // just an address
       parts = address.match(/^\s*()([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6})$/i);
     if (parts) // if either of the regex matches grab off the full match element
@@ -1064,48 +1115,46 @@ function decompose_rfc822_address(address) {
 
 function tnef_pack_get_name_addr(pkg, orig_name_addr) {
   tnef_log_msg("TNEF: Parsing original address line: " + orig_name_addr, 6);
-  var orig_addr_parts = decompose_rfc822_address(orig_name_addr);
+  const orig_addr_parts = decompose_rfc822_address(orig_name_addr);
 
   // if email address not in the name_addr then hunt through the message header
-  if (pkg.msg_header && (!orig_addr_parts[1] || orig_addr_parts[1] == "")) {
-    var all_addrs = [], all_names = [];
-    var addrs = {}, names = {}, full_names = {};
-    var i, num_addrs;
+  if (pkg.msg_header && (!orig_addr_parts[1] || orig_addr_parts[1] === "")) {
+    let all_addrs = [], all_names = [];
+    const _addrs = {}, _names = {}, _full_names = {}; // eslint-disable-line no-unused-vars
+    let i, _num_addrs; // eslint-disable-line no-unused-vars
 
-    function rm_quotes(element, idx, array) {
+    function rm_quotes(_element, idx, array) {
       if (array[idx]) {
-        var matches = array[idx].match(/\042([^\042]*)\042|\047([^\047]*)\047/);
+        const matches = array[idx].match(/\042([^\042]*)\042|\047([^\047]*)\047/);
         if (matches && matches.length > 0)
-          array[idx] = matches.length < 2 || (matches[1] && matches[1] != "") ? matches[1] : matches[2];
+          array[idx] = matches.length < 2 || (matches[1] && matches[1] !== "") ? matches[1] : matches[2];
       }
     }
 
     orig_addr_parts[1] = "";
 
-    var all_addrs;
-
     let addresses = MailServices.headerParser.parseEncodedHeader(pkg.msg_header.author);
-    for (let addr of addresses) {
+    for (const addr of addresses) {
       all_addrs = all_addrs.concat(addr.email);
       all_names = all_names.concat(addr.name);
     }
 
     addresses = MailServices.headerParser.parseEncodedHeader(pkg.msg_header.recipients);
-    for (let addr of addresses) {
+    for (const addr of addresses) {
       all_addrs = all_addrs.concat(addr.email);
       all_names = all_names.concat(addr.name);
     }
 
     addresses = MailServices.headerParser.parseEncodedHeader(pkg.msg_header.ccList);
-    for (let addr of addresses) {
+    for (const addr of addresses) {
       all_addrs = all_addrs.concat(addr.email);
       all_names = all_names.concat(addr.name);
     }
 
     all_names.forEach(rm_quotes);
 
-    for (i = 0; i < all_names.length && orig_addr_parts[1] == ""; i++)
-      if (all_names[i] == orig_addr_parts[0])
+    for (i = 0; i < all_names.length && orig_addr_parts[1] === ""; i++)
+      if (all_names[i] === orig_addr_parts[0])
         orig_addr_parts[1] = all_addrs[i];
   }
 
@@ -1113,7 +1162,7 @@ function tnef_pack_get_name_addr(pkg, orig_name_addr) {
 }
 
 function tnef_pack_data_left(instrm) {
-  var dl = instrm.available();
+  const dl = instrm.available();
 
   if (dl > 0 && dl < MINIMUM_ATTR_LENGTH) {
     tnef_log_msg("ERROR: garbage at end of file.\n", 5);
@@ -1126,7 +1175,7 @@ function tnef_pack_data_left(instrm) {
 
 // Reads and decodes a object from the stream
 function tnef_pack_read_object(pkg, instrm) {
-  var togo = 0;
+  let togo = 0;
 
   if (pkg.cur_attr)
     togo = pkg.cur_attr.len - pkg.cur_attr.buf.length;
@@ -1145,11 +1194,11 @@ function tnef_pack_handle_body_part(pkg, data, len, content_type, listener) {
   if (!data)
     return;
 
-  var body_part_prefix = prefs["body_part_prefix"];
+  const body_part_prefix = prefs["body_part_prefix"];
 
-  var file = new TnefFile(pkg);
+  const file = new TnefFile(pkg);
 
-  if (typeof (data) == "Array")
+  if (typeof (data) === "Array")
     file.data = String.fromCharCode.apply(null, data);
   else
     file.data = data;
@@ -1174,15 +1223,15 @@ function tnef_pack_handle_text_attr(pkg, attr, listener) {
 }
 
 function tnef_pack_handle_html_data(pkg, mattr, listener) {
-  for (var j = 0; j < mattr.num_values; j++)
+  for (let j = 0; j < mattr.num_values; j++)
     tnef_pack_handle_body_part(pkg, mattr.values[j], mattr.values[j].length, "text/html", listener);
 }
 
 
 function tnef_pack_handle_rtf_data(pkg, mattr, listener) {
-  for (var j = 0; j < mattr.num_values; j++) {
+  for (let j = 0; j < mattr.num_values; j++) {
     if (is_rtf_data(mattr.values[j])) {
-      var rtf_data = rtf_data_parse(mattr.values[j], mattr.values[j].length);
+      const rtf_data = rtf_data_parse(mattr.values[j], mattr.values[j].length);
       if (rtf_data)
         tnef_pack_handle_body_part(pkg, rtf_data, rtf_data.length, "application/rtf", listener);
     }
@@ -1191,8 +1240,8 @@ function tnef_pack_handle_rtf_data(pkg, mattr, listener) {
 
 
 function tnef_pack_handle_mapi_attrs(pkg, mattrs, listener) {
-  var data = "";
-  var i = 0;
+  let data = "";
+  let i = 0;
 
   if (!mattrs)
     return (null);
@@ -1236,8 +1285,7 @@ function tnef_pack_handle_mapi_attrs(pkg, mattrs, listener) {
 }
 
 function mescape(str) {
-  var i = 0;
-  var newstr;
+  let newstr;
 
   newstr = str.replace("\n", "\\n");
   newstr = newstr.replace("\t", "\\t");
@@ -1248,14 +1296,14 @@ function mescape(str) {
 }
 
 function tnef_pack_handle_contact_data(pkg, mattrs, listener) {
-  var vcal_str = "";
-  var mattr = null;
+  let vcal_str = "";
+  let mattr = null;
 
   mattr = mapi_attr_find(mattrs, MAPI_SENDER_SEARCH_KEY);
-  if (!mattr || mattr.values[0] == 0)
+  if (!mattr || mattr.values[0] === 0)
     mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_ORGANIZER_ALIAS);
   if (mattr && mattr.num_values > 0) {
-    var i = mattr.values[0].indexOf(":");
+    let i = mattr.values[0].indexOf(":");
     if (i < 0)
       i = 0;
     else
@@ -1322,7 +1370,7 @@ function ical_date_string(dt) {
 
 
 function ical_day_list_from_bitset(bits) {
-  var vcal_str = "";
+  let vcal_str = "";
   if (bits & 0x01) vcal_str += "SU";
   if (bits > 0x01) vcal_str += ",";
   if (bits & 0x02) vcal_str += "MO";
@@ -1341,11 +1389,11 @@ function ical_day_list_from_bitset(bits) {
 
 
 function tnef_pack_appt_attendees_ics(pkg, liststr, role) {
-  var vcal_str = "";
-  var atnd = 0;
-  var attendees;
+  let vcal_str = "";
+  let atnd = 0;
+  let attendees;
 
-  if (liststr == "")
+  if (liststr === "")
     return ("");
 
   attendees = liststr.split(";");
@@ -1355,11 +1403,11 @@ function tnef_pack_appt_attendees_ics(pkg, liststr, role) {
     if (!attendees[atnd].replace(/[^\x20-\x7E]+/g, '')) {
       continue;
     }
-    var parts = tnef_pack_get_name_addr(pkg, attendees[atnd]);
-    let parts_test = parts[0].replace(/[^\x20-\x7E]+/g, '');
+    const parts = tnef_pack_get_name_addr(pkg, attendees[atnd]);
+    const parts_test = parts[0].replace(/[^\x20-\x7E]+/g, '');
     if (parts_test) {
       vcal_str += "ATTENDEE;PARTSTAT=NEEDS-ACTION;ROLE=" + role + ";RSVP=TRUE";
-      if (parts.length > 1 && parts[1] && parts[1] != "") {
+      if (parts.length > 1 && parts[1] && parts[1] !== "") {
         vcal_str += ";CN=\"" + parts[0] + "\":mailto:\"" + parts[1] + "\"\n";
       } else {
         vcal_str += ":" + parts[0] + "\n";
@@ -1372,9 +1420,9 @@ function tnef_pack_appt_attendees_ics(pkg, liststr, role) {
 
 
 function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
-  var vcal_str = "BEGIN:VCALENDAR\n";
-  var mattr = null;
-  var is_meeting = pkg.msg_class.indexOf(".Meeting.") >= 0;
+  let vcal_str = "BEGIN:VCALENDAR\n";
+  let mattr = null;
+  const _is_meeting = pkg.msg_class.indexOf(".Meeting.") >= 0; // eslint-disable-line no-unused-vars
 
   if (pkg.msg_class && (pkg.msg_class.indexOf(".MtgCncl") >= 0 ||
     pkg.msg_class.indexOf(".Meeting.Canceled") >= 0))
@@ -1387,12 +1435,12 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
   vcal_str += "BEGIN:VEVENT\n";
 
   mattr = mapi_attr_find(mattrs, MAPI_MEETING_CLEAN_GLOBAL_OBJECT_ID);
-  if (!mattr || mattr.values[0] == 0)
+  if (!mattr || mattr.values[0] === 0)
     mattr = mapi_attr_find(mattrs, MAPI_MEETING_GLOBAL_OBJECT_ID);
-  if (!mattr || mattr.values[0] == 0)
+  if (!mattr || mattr.values[0] === 0)
     mattr = mapi_attr_find(mattrs, MAPI_MAPPING_SIGNATURE);
   if (mattr && mattr.num_values > 0) {
-    var i = 0;
+    let i = 0;
 
     vcal_str += "UID:";
     for (i = 0; i < mattr.values[0].length; i++)
@@ -1405,31 +1453,31 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
   if (mattr && mattr.num_values > 0)
     vcal_str += "SEQUENCE:" + mattr.values[0] + "\n";
 
+  let parts;
   mattr = mapi_attr_find(mattrs, MAPI_PRIMARY_SEND_ACCOUNT);
   if (mattr && mattr.num_values > 0) {
-    var parts = mattr.values[0].split("\x01");
+    parts = mattr.values[0].split("\x01");
     if (parts.length)
       vcal_str += "ORGANIZER;CN=\"" + parts[2] + "\":mailto:" + parts[1] + "\n";
   }
-  if (!mattr || mattr.values[0] == 0) {
-    var parts;
+  if (!mattr || mattr.values[0] === 0) {
     mattr = mapi_attr_find(mattrs, MAPI_SENDER_NAME);
-    var mattr2 = mapi_attr_find(mattrs, MAPI_SENDER_EMAIL_ADDRESS);
+    const mattr2 = mapi_attr_find(mattrs, MAPI_SENDER_EMAIL_ADDRESS);
     if (mattr && mattr.num_values > 0 && mattr2 && mattr2.num_values > 0) {
       parts = [mattr.values[0], mattr2.values[0]];
     } else {
-      if (!mattr || mattr.values[0] == 0)
+      if (!mattr || mattr.values[0] === 0)
         mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_ORGANIZER_ALIAS);
-      if (!mattr || mattr.values[0] == 0)
+      if (!mattr || mattr.values[0] === 0)
         mattr = mapi_attr_find(mattrs, MAPI_CREATOR_NAME);
-      if (!mattr || mattr.values[0] == 0)
+      if (!mattr || mattr.values[0] === 0)
         mattr = mapi_attr_find(mattrs, MAPI_TASK_F_CREATOR);
       if (mattr && mattr.num_values > 0)
         parts = tnef_pack_get_name_addr(pkg, mattr.values[0]);
     }
     if (parts) {
       vcal_str += "ORGANIZER;PARTSTAT=ACCEPTED;ROLE=CHAIR";
-      if (parts[1] && parts[1] != "")
+      if (parts[1] && parts[1] !== "")
         vcal_str += ";CN=\"" + parts[0] + "\":mailto:" + parts[1] + "\n";
       else
         vcal_str += ":" + parts[0] + "\n";
@@ -1438,14 +1486,14 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
 
   // Required Attendees
   mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_REQUIRED_ATTENDEES);
-  if (!mattr || mattr.values[0] == 0)
+  if (!mattr || mattr.values[0] === 0)
     mattr = mapi_attr_find(mattrs, MAPI_MEETING_REQUIRED_ATTENDEES);
   if (mattr && mattr.num_values > 0)
     vcal_str += tnef_pack_appt_attendees_ics(pkg, mattr.values[0], "REQ-PARTICIPANT");
 
   // Optional attendees
   mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_OPTIONAL_ATTENDEES);
-  if (!mattr || mattr.values[0] == 0)
+  if (!mattr || mattr.values[0] === 0)
     mattr = mapi_attr_find(mattrs, MAPI_MEETING_OPTIONAL_ATTENDEES);
   if (mattr && mattr.num_values > 0) {
     vcal_str += tnef_pack_appt_attendees_ics(pkg, mattr.values[0], "OPT-PARTICIPANT");
@@ -1457,7 +1505,7 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
 
   mattr = mapi_attr_find(mattrs, MAPI_RTF_COMPRESSED);
   if (mattr) {
-    var rtf_data = rtf_data_parse(mattr.values[0], mattr.values[0].length);
+    const rtf_data = rtf_data_parse(mattr.values[0], mattr.values[0].length);
     vcal_str += "DESCRIPTION:" + rtf_to_escaped_text(rtf_data);
   }
 
@@ -1474,7 +1522,7 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
   if (!mattr || !mattr.num_values)
     mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_START_DATE);
   if (mattr && mattr.num_values) {
-    var dt = mattr.values[0];
+    const dt = mattr.values[0];
     vcal_str += "DTSTART:" + ical_date_string(dt) + "\n";
   }
 
@@ -1485,21 +1533,21 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
   if (!mattr || !mattr.num_values)
     mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_END_DATE);
   if (mattr && mattr.num_values) {
-    var dt = mattr.values[0];
+    const dt = mattr.values[0];
     vcal_str += "DTEND:" + ical_date_string(dt) + "\n";
   }
 
   // Date Stamp
   mattr = mapi_attr_find(mattrs, MAPI_CREATION_TIME);
   if (mattr && mattr.num_values) {
-    var dt = mattr.values[0];
+    const dt = mattr.values[0];
     vcal_str += "CREATED:" + ical_date_string(dt) + "\n";
   }
 
   // Class
   mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_SEQUENCE_TIME);
   if (mattr && mattr.num_values) {
-    //vcal_str += "CLASS:" + (mattr.values[0] == 1 ? "PRIVATE" : "PUBLIC") + "\n";
+    //vcal_str += "CLASS:" + (mattr.values[0] === 1 ? "PRIVATE" : "PUBLIC") + "\n";
   }
 
   const MAPI_APPT_RECUR_FREQ_DAILY = 0x200A;
@@ -1522,23 +1570,23 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
   // Recurrence
   mattr = mapi_attr_find(mattrs, MAPI_APPOINTMENT_RECUR);
   if (mattr && mattr.num_values) {
-    var recur_freq = GETINT16(mattr.values[0], 4), patt_type = GETINT16(mattr.values[0], 6);
-    var cal_type = GETINT16(mattr.values[0], 8), first_date = GETINT32(mattr.values[0], 10);
-    var period = GETINT32(mattr.values[0], 14), sliding_flag = GETINT32(mattr.values[0], 18);
-    var patt_type_spec = GETINT32(mattr.values[0], 22);
-    var patt_type_spec2 = GETINT32(mattr.values[0], 26);
-    var pts_off = (patt_type == MAPI_APPT_RECUR_PATT_DAY ? 0 :
-      (patt_type == MAPI_APPT_RECUR_PATT_MONTH_NTH ||
-        patt_type == MAPI_APPT_RECUR_PATT_HJ_MONTH_NTH) ? 8 : 4);
-    var end_type = GETINT32(mattr.values[0], 22 + pts_off);
-    var occur_cnt = GETINT32(mattr.values[0], 26 + pts_off);
-    var first_dow = GETINT32(mattr.values[0], 30 + pts_off);
-    var del_inst_cnt = GETINT32(mattr.values[0], 34 + pts_off);
-    var del_inst_start = 38 + pts_off, del_inst_end = del_inst_start + 4 * del_inst_cnt;
-    var mod_inst_cnt = GETINT32(mattr.values[0], del_inst_end);
-    var mod_inst_start = del_inst_end + 4, mod_inst_end = mod_inst_start + 4 * mod_inst_cnt;
-    var start_date = date_from_1601_mins(GETINT32(mattr.values[0], mod_inst_end));
-    var end_date = date_from_1601_mins(GETINT32(mattr.values[0], mod_inst_end + 4));
+    const recur_freq = GETINT16(mattr.values[0], 4), patt_type = GETINT16(mattr.values[0], 6);
+    const _cal_type = GETINT16(mattr.values[0], 8), _first_date = GETINT32(mattr.values[0], 10);
+    const period = GETINT32(mattr.values[0], 14), _sliding_flag = GETINT32(mattr.values[0], 18);
+    const patt_type_spec = GETINT32(mattr.values[0], 22);
+    const patt_type_spec2 = GETINT32(mattr.values[0], 26);
+    const pts_off = (patt_type === MAPI_APPT_RECUR_PATT_DAY ? 0 :
+      (patt_type === MAPI_APPT_RECUR_PATT_MONTH_NTH ||
+        patt_type === MAPI_APPT_RECUR_PATT_HJ_MONTH_NTH) ? 8 : 4);
+    const end_type = GETINT32(mattr.values[0], 22 + pts_off);
+    const occur_cnt = GETINT32(mattr.values[0], 26 + pts_off);
+    const _first_dow = GETINT32(mattr.values[0], 30 + pts_off);
+    const del_inst_cnt = GETINT32(mattr.values[0], 34 + pts_off);
+    const del_inst_start = 38 + pts_off, del_inst_end = del_inst_start + 4 * del_inst_cnt;
+    const mod_inst_cnt = GETINT32(mattr.values[0], del_inst_end);
+    const mod_inst_start = del_inst_end + 4, mod_inst_end = mod_inst_start + 4 * mod_inst_cnt;
+    const _start_date = date_from_1601_mins(GETINT32(mattr.values[0], mod_inst_end));
+    const end_date = date_from_1601_mins(GETINT32(mattr.values[0], mod_inst_end + 4));
 
     vcal_str += "RRULE:";
     switch (recur_freq) {
@@ -1548,7 +1596,7 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
       case MAPI_APPT_RECUR_FREQ_YEARLY: vcal_str += "FREQ=YEARLY"; break;
     }
 
-    vcal_str += ";INTERVAL=" + period * (recur_freq == MAPI_APPT_RECUR_FREQ_DAILY ? 1 / 1440 : 1);
+    vcal_str += ";INTERVAL=" + period * (recur_freq === MAPI_APPT_RECUR_FREQ_DAILY ? 1 / 1440 : 1);
 
     switch (end_type) {
       case MAPI_APPT_RECUR_END_AFTER_DATE: vcal_str += ";UNTIL=" + ical_date_string(end_date); break;
@@ -1566,7 +1614,7 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
         break;
       case MAPI_APPT_RECUR_PATT_MONTH_NTH: case MAPI_APPT_RECUR_PATT_HJ_MONTH_NTH:
         vcal_str += ";BYDAY=" + ical_day_list_from_bitset(patt_type_spec);
-        vcal_str += ";BYSETPOS=" + (patt_type_spec2 == 0x05 ? -1 : patt_type_spec2);
+        vcal_str += ";BYSETPOS=" + (patt_type_spec2 === 0x05 ? -1 : patt_type_spec2);
     }
 
     vcal_str += "\n";
@@ -1586,9 +1634,9 @@ export function tnef_parse(instrm, msg_header, listener, _prefs) {
   _log = createLogger(prefs["debug_level"] ?? 5);
 
   try {
-  var sig = 0;
-  var key = 0;
-  var pkg = null;
+  let sig = 0;
+  let key = 0;
+  let pkg = null;
 
   tnef_log_msg("TNEF: Entering tnef_parse()", 6); //MKA
   tnef_log_msg("TNEF: new TnefPackage()", 6);
@@ -1597,7 +1645,7 @@ export function tnef_parse(instrm, msg_header, listener, _prefs) {
 
   // check that this is in fact a TNEF file
   sig = GETINT32(instrm.readByteArray(4));
-  if (sig != TNEF_SIGNATURE) {
+  if (sig !== TNEF_SIGNATURE) {
     tnef_log_msg("sig = " + sig + "\nSeems not to be a TNEF file\n", 8);
     return (null);
   }
@@ -1613,12 +1661,12 @@ export function tnef_parse(instrm, msg_header, listener, _prefs) {
   if (pkg.cur_attr && tnef_attr_incomplete(pkg.cur_attr))
     return (pkg);
   while (pkg.cur_attr && tnef_pack_data_left(instrm)) {
-    if (pkg.cur_attr.name == TNEF_ATTR_OEM_CODEPAGE) {
+    if (pkg.cur_attr.name === TNEF_ATTR_OEM_CODEPAGE) {
       pkg.code_page = GETINT32(pkg.cur_attr.buf);
       tnef_log_msg("TNEF: OEM Code Page = " + pkg.code_page, 7);
     }
     // This signals the beginning of a file
-    if (pkg.cur_attr.name == TNEF_ATTR_ATTACH_REND_DATA) {
+    if (pkg.cur_attr.name === TNEF_ATTR_ATTACH_REND_DATA) {
       if (pkg.cur_file)
         tnef_file_notify(pkg.cur_file, listener, true);
       else
@@ -1628,15 +1676,15 @@ export function tnef_parse(instrm, msg_header, listener, _prefs) {
     // Add the data to our lists.
     switch (pkg.cur_attr.lvl_type) {
       case LVL_MESSAGE:
-        if (pkg.cur_attr.name == TNEF_ATTR_BODY) {
+        if (pkg.cur_attr.name === TNEF_ATTR_BODY) {
           tnef_pack_handle_text_attr(pkg, pkg.cur_attr, listener);
-        } else if (pkg.cur_attr.name == TNEF_ATTR_MESSAGE_CLASS) {
+        } else if (pkg.cur_attr.name === TNEF_ATTR_MESSAGE_CLASS) {
           pkg.msg_class = pkg.cur_attr.buf;
-        } else if (pkg.cur_attr.name == TNEF_ATTR_MAPI_PROPS) {
-          var mapi_attrs = mapi_attr_read(pkg.cur_attr.buf, pkg.cur_attr.len);
+        } else if (pkg.cur_attr.name === TNEF_ATTR_MAPI_PROPS) {
+          let mapi_attrs = mapi_attr_read(pkg.cur_attr.buf, pkg.cur_attr.len);
 
           if (mapi_attrs) {
-            var has_contact_data = false;
+            let has_contact_data = false;
 
             if (prefs["attach_raw_mapi"])
               tnef_pack_handle_mapi_attrs(pkg, mapi_attrs, listener);
@@ -1668,9 +1716,9 @@ export function tnef_parse(instrm, msg_header, listener, _prefs) {
             // Non-delivery		"Report.IPM.Note.NDR"  "IPM.Microsoft Mail.Non-Delivery"
             // Read/Return Receipt	"Report.IPM.Note.RN"  "IPM.Microsoft Mail.Read Receipt"
             if (pkg.msg_class &&
-              (pkg.msg_class.substring(0, 15) == "IPM.Appointment" ||
-                pkg.msg_class.substring(0, 12) == "IPM.Schedule" ||
-                pkg.msg_class.substring(0, 22) == "IPM.Microsoft Schedule"))
+              (pkg.msg_class.substring(0, 15) === "IPM.Appointment" ||
+                pkg.msg_class.substring(0, 12) === "IPM.Schedule" ||
+                pkg.msg_class.substring(0, 22) === "IPM.Microsoft Schedule"))
               tnef_pack_handle_appt_data(pkg, mapi_attrs, listener);
 
             if (has_contact_data)

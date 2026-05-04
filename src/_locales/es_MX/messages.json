@@ -51,39 +51,39 @@
         "message": "Coincidencia estricta de tipos de contenido"
     },
     "group.attachments": {
-        "message": "Attachment handling"
+        "message": "Manejo de archivos adjuntos"
     },
     "group.calendar": {
-        "message": "Calendar / Contacts"
+        "message": "Calendario / Contactos"
     },
     "group.advanced": {
-        "message": "Advanced / Debug"
+        "message": "Avanzado / Depuración"
     },
     "attach_raw_mapi_check.hint": {
-        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
+        "message": "Adjuntar un volcado en texto plano de las propiedades MAPI sin procesar junto con los archivos decodificados."
     },
     "direct_to_calendar_check.hint": {
-        "message": "Automatically open calendar invitations and contact cards without saving them first."
+        "message": "Abrir automáticamente las invitaciones de calendario y tarjetas de contacto sin guardarlas primero."
     },
     "disable_filename_character_set_check.hint": {
-        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames. Enable if filenames look garbled."
+        "message": "Omitir la conversión de página de códigos OEM → Unicode en los nombres de archivos adjuntos. Activar si los nombres de archivo se ven ilegibles."
     },
     "remove_winmail_dat_check.hint": {
-        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+        "message": "Ocultar el archivo adjunto winmail.dat original después de extraer su contenido."
     },
     "strict_contenttype_check.hint": {
-        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef."
+        "message": "Solo procesar archivos adjuntos con el nombre \"winmail.dat\" o con tipo de contenido application/ms-tnef. Desactivar para procesar cualquier adjunto que parezca TNEF."
     },
     "enable_debug_check.hint": {
-        "message": "Write verbose [LookOut] messages to the browser console."
+        "message": "Escribir mensajes detallados de [LookOut] en la consola del navegador. Útil para diagnosticar problemas de análisis."
     },
     "tnef.info.prefix": {
-        "message": "What is TNEF? Learn more on the"
+        "message": "¿Qué es TNEF? Obtén más información en la"
     },
     "tnef.info.link": {
-        "message": "LookOut (Refactored) README"
+        "message": "página del README de LookOut (Refactored)"
     },
     "tnef.info.suffix": {
-        "message": "page."
+        "message": "."
     }
 }

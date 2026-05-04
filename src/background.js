@@ -40,7 +40,7 @@ async function handleMessage(tab, message) {
 
   try {
     // Read attachments of the message
-    let attachments = await browser.Attachment.listAttachments(tab.id);
+    const attachments = await browser.Attachment.listAttachments(tab.id);
     if (!attachments || attachments.length === 0) {
       return;
     }
@@ -57,10 +57,10 @@ async function handleMessage(tab, message) {
     // Re-create logger with actual debug level.
     log = createLogger(prefs["debug_enabled"] ? 10 : 5);
 
-    let removedParts = [];
-    let tnefAttachments = [];
+    const removedParts = [];
+    const tnefAttachments = [];
 
-    for (let attachment of attachments) {
+    for (const attachment of attachments) {
       if (
         attachment.name !== "winmail.dat" &&
         attachment.contentType !== "application/ms-tnef" &&
@@ -79,17 +79,17 @@ async function handleMessage(tab, message) {
         continue;
       }
 
-      let tnefExtractor = new TnefExtractor();
-      let tnefFiles = await tnefExtractor.parse(file, null, prefs);
+      const tnefExtractor = new TnefExtractor();
+      const tnefFiles = await tnefExtractor.parse(file, null, prefs);
 
       for (let i = 0; i < tnefFiles.length; i++) {
-        let partName = `${attachment.partName}.${i + 1}`;
+        const partName = `${attachment.partName}.${i + 1}`;
         // Skip if we have added that attachment already.
         if (attachments.find((a) => a.partName === partName)) {
           continue;
         }
 
-        let tnefAttachment = {
+        const tnefAttachment = {
           contentType: tnefFiles[i].type,
           name: tnefFiles[i].name,
           size: tnefFiles[i].size,
@@ -134,11 +134,11 @@ async function handleMessage(tab, message) {
 
 // --- Startup: process all already-open message tabs ---
 try {
-  let tabs = (await browser.tabs.query({})).filter((t) =>
+  const tabs = (await browser.tabs.query({})).filter((t) =>
     ["messageDisplay", "mail"].includes(t.type)
   );
-  for (let tab of tabs) {
-    let message = await browser.messageDisplay.getDisplayedMessage(tab.id);
+  for (const tab of tabs) {
+    const message = await browser.messageDisplay.getDisplayedMessage(tab.id);
     if (message) {
       handleMessage(tab, message);
     }

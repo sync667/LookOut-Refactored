@@ -15,12 +15,12 @@
  *
  */
 
-var i18n = {
+const i18n = { // eslint-disable-line no-unused-vars
   updateString(string) {
-    let re = new RegExp(this.keyPrefix + "(.+?)__", "g");
+    const re = new RegExp(this.keyPrefix + "(.+?)__", "g");
     return string.replace(re, (matched) => {
       const key = matched.slice(this.keyPrefix.length, -2);
-      let rv = this.extension
+      const rv = this.extension
         ? this.extension.localeData.localizeMessage(key)
         : messenger.i18n.getMessage(key);
       return rv || matched;

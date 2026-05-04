@@ -51,39 +51,39 @@
         "message": "Bestandstype strenger controleren"
     },
     "group.attachments": {
-        "message": "Attachment handling"
+        "message": "Bijlageverwerking"
     },
     "group.calendar": {
-        "message": "Calendar / Contacts"
+        "message": "Agenda / Contacten"
     },
     "group.advanced": {
-        "message": "Advanced / Debug"
+        "message": "Geavanceerd / Foutopsporing"
     },
     "attach_raw_mapi_check.hint": {
-        "message": "Attach a plain-text dump of raw MAPI properties alongside the decoded files."
+        "message": "Voeg een platte-tekstdump van de ruwe MAPI-eigenschappen toe naast de gedecodeerde bestanden."
     },
     "direct_to_calendar_check.hint": {
-        "message": "Automatically open calendar invitations and contact cards without saving them first."
+        "message": "Agenda-uitnodigingen en contactkaarten automatisch openen zonder ze eerst op te slaan."
     },
     "disable_filename_character_set_check.hint": {
-        "message": "Skip the OEM code-page → Unicode conversion of attachment filenames. Enable if filenames look garbled."
+        "message": "Sla de OEM-codepagina → Unicode-conversie van bijlagebestandsnamen over. Inschakelen als bestandsnamen er onleesbaar uitzien."
     },
     "remove_winmail_dat_check.hint": {
-        "message": "Hide the raw winmail.dat attachment after its contents have been extracted."
+        "message": "Verberg de ruwe winmail.dat-bijlage nadat de inhoud is uitgepakt."
     },
     "strict_contenttype_check.hint": {
-        "message": "Only process attachments named \"winmail.dat\" or with content-type application/ms-tnef."
+        "message": "Verwerk alleen bijlagen met de naam \"winmail.dat\" of met inhoudstype application/ms-tnef. Uitschakelen om alle bijlagen te verwerken die op TNEF lijken."
     },
     "enable_debug_check.hint": {
-        "message": "Write verbose [LookOut] messages to the browser console."
+        "message": "Schrijf uitgebreide [LookOut]-berichten naar de browserconsole. Handig voor het diagnosticeren van verwerkingsproblemen."
     },
     "tnef.info.prefix": {
-        "message": "What is TNEF? Learn more on the"
+        "message": "Wat is TNEF? Meer informatie op de"
     },
     "tnef.info.link": {
         "message": "LookOut (Refactored) README"
     },
     "tnef.info.suffix": {
-        "message": "page."
+        "message": "pagina."
     }
 }

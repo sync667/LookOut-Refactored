@@ -5,13 +5,10 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "lookout@refactored",
-      "strict_min_version": "140.0"
-    }
-  },
-  "applications": {
-    "gecko": {
-      "id": "lookout@refactored",
-      "strict_min_version": "140.0"
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   },
   "version": "1.0.0",
@@ -19,9 +16,11 @@
   "author": "sync667",
   "homepage_url": "https://github.com/sync667/LookOut-Refactored/",
   "icons": {
+    "16": "icons/LOicon-16.png",
     "32": "icons/LOicon-32.png",
     "48": "icons/LOicon-48.png",
     "64": "icons/LOicon-64.png",
+    "96": "icons/LOicon-96.png",
     "128": "icons/LOicon-128.png"
   },
   "experiment_apis": {
