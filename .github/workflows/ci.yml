@@ -146,40 +146,46 @@ jobs:
       - name: Generate changelog
         id: changelog
         run: |
-          PREV_TAG=$(git tag --sort=-creatordate | grep -E '^v' | sed -n '2p' || true)
+          # The current tag (v1.0.1) does NOT exist yet -- it gets created by
+          # the release step.  So the "latest" existing tag is actually the
+          # *previous* release.
+          PREV_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -n1 || true)
+
           if [ -z "$PREV_TAG" ]; then
-            RANGE="HEAD"
+            # First ever release -- include all commits
+            RANGE=""
+            COMPARE_BASE="initial"
           else
             RANGE="${PREV_TAG}..HEAD"
+            COMPARE_BASE="$PREV_TAG"
           fi
+
+          log_section() {
+            local title="$1" pattern="$2"
+            local lines
+            lines=$(git log $RANGE --pretty=format:"- %s" --grep="$pattern" 2>/dev/null || true)
+            if [ -n "$lines" ]; then
+              echo "### $title"
+              echo "$lines"
+              echo ""
+            fi
+          }
+
           {
             echo "## What's Changed"
             echo ""
-            FEATS=$(git log "$RANGE" --pretty=format:"- %s" --grep="^feat" || true)
-            if [ -n "$FEATS" ]; then
-              echo "### New Features"
-              echo "$FEATS"
-              echo ""
-            fi
-            FIXES=$(git log "$RANGE" --pretty=format:"- %s" --grep="^fix" || true)
-            if [ -n "$FIXES" ]; then
-              echo "### Bug Fixes"
-              echo "$FIXES"
-              echo ""
-            fi
-            DOCS=$(git log "$RANGE" --pretty=format:"- %s" --grep="^docs" || true)
-            if [ -n "$DOCS" ]; then
-              echo "### Documentation"
-              echo "$DOCS"
-              echo ""
-            fi
-            OTHER=$(git log "$RANGE" --pretty=format:"- %s" --invert-grep --grep="^feat" --grep="^fix" --grep="^docs" || true)
+            log_section "New Features" "^feat"
+            log_section "Bug Fixes" "^fix"
+            log_section "Documentation" "^docs"
+
+            OTHER=$(git log $RANGE --pretty=format:"- %s" --invert-grep --grep="^feat" --grep="^fix" --grep="^docs" 2>/dev/null || true)
             if [ -n "$OTHER" ]; then
               echo "### Other Changes"
               echo "$OTHER"
               echo ""
             fi
-            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG:-initial}...$(git describe --tags --always)"
+
+            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${COMPARE_BASE}...v${{ steps.version.outputs.VERSION }}"
           } > /tmp/release-notes.md
           cat /tmp/release-notes.md
 
