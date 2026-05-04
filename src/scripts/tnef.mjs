@@ -11,7 +11,10 @@
  *   Calendaring and contact data is transcoded to standards formats.
  */
 
-var prefs;
+import { createLogger } from "/scripts/logger.mjs";
+
+let _log = createLogger(5);
+let prefs;
 
 var LVL_MESSAGE = 0x1;
 var LVL_ATTACHMENT = 0x2;
@@ -128,9 +131,7 @@ function assert(condition) {
 }
 
 function tnef_log_msg(msg, level) {
-  if ((level == null ? 9 : level) <= prefs["debug_level"]) {
-    console.log(msg);
-  }
+  _log.log(msg, level ?? 9);
 }
 
 // these routines (GETXX) deal with both endian and aggregation
@@ -1582,7 +1583,9 @@ function tnef_pack_handle_appt_data(pkg, mattrs, listener) {
 // The entry point into this module. This parses an entire TNEF file.
 export function tnef_parse(instrm, msg_header, listener, _prefs) {
   prefs = _prefs;
+  _log = createLogger(prefs["debug_level"] ?? 5);
 
+  try {
   var sig = 0;
   var key = 0;
   var pkg = null;
@@ -1705,5 +1708,9 @@ export function tnef_parse(instrm, msg_header, listener, _prefs) {
     pkg.cur_attr = null;
 
   return (null);
+  } catch (err) {
+    _log.error('TNEF parse error: ' + err.message);
+    return null;
+  }
 }
 
