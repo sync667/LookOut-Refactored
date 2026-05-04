@@ -8,6 +8,12 @@
       "strict_min_version": "140.0"
     }
   },
+  "applications": {
+    "gecko": {
+      "id": "lookout@refactored",
+      "strict_min_version": "140.0"
+    }
+  },
   "version": "8.0",
   "default_locale": "en-US",
   "author": "sync667",
