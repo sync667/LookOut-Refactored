@@ -5,6 +5,7 @@ on:
     branches: ["**"]
   pull_request:
     branches: ["**"]
+  workflow_dispatch:
 
 jobs:
   lint-and-build:
@@ -62,9 +63,11 @@ jobs:
   release:
     needs: [lint-and-build, test]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -72,10 +75,44 @@ jobs:
           node-version: "20"
           cache: "npm"
 
+      - name: Determine version from tag
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.0")
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VERSION"
+
+      - name: Stamp version into package.json and manifest.json
+        run: |
+          VERSION="${{ steps.version.outputs.VERSION }}"
+          # Update package.json
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.version = '$VERSION';
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+          # Update manifest.json
+          node -e "
+            const fs = require('fs');
+            const m = JSON.parse(fs.readFileSync('src/manifest.json', 'utf8'));
+            m.version = '$VERSION';
+            fs.writeFileSync('src/manifest.json', JSON.stringify(m, null, 2) + '\n');
+          "
+          echo "Stamped version $VERSION"
+
       - name: Install dependencies
         run: npm ci
 
+      - name: Build extension
+        run: npm run build
+
       - name: Sign and publish to ATN
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
           WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
@@ -87,7 +124,57 @@ jobs:
             --api-key=$WEB_EXT_API_KEY \
             --api-secret=$WEB_EXT_API_SECRET
 
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Find the previous tag (if any)
+          PREV_TAG=$(git tag --sort=-creatordate | grep -E '^v' | sed -n '2p' || true)
+          if [ -z "$PREV_TAG" ]; then
+            RANGE="HEAD"
+          else
+            RANGE="${PREV_TAG}..HEAD"
+          fi
+          # Build a categorised changelog from commit messages
+          {
+            echo "## What's Changed"
+            echo ""
+            # Features
+            FEATS=$(git log "$RANGE" --pretty=format:"- %s" --grep="^feat" || true)
+            if [ -n "$FEATS" ]; then
+              echo "### New Features"
+              echo "$FEATS"
+              echo ""
+            fi
+            # Fixes
+            FIXES=$(git log "$RANGE" --pretty=format:"- %s" --grep="^fix" || true)
+            if [ -n "$FIXES" ]; then
+              echo "### Bug Fixes"
+              echo "$FIXES"
+              echo ""
+            fi
+            # Docs
+            DOCS=$(git log "$RANGE" --pretty=format:"- %s" --grep="^docs" || true)
+            if [ -n "$DOCS" ]; then
+              echo "### Documentation"
+              echo "$DOCS"
+              echo ""
+            fi
+            # Everything else not already captured
+            OTHER=$(git log "$RANGE" --pretty=format:"- %s" --invert-grep --grep="^feat" --grep="^fix" --grep="^docs" || true)
+            if [ -n "$OTHER" ]; then
+              echo "### Other Changes"
+              echo "$OTHER"
+              echo ""
+            fi
+            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...$(git describe --tags --always)"
+          } > /tmp/release-notes.md
+          cat /tmp/release-notes.md
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/*.xpi
+          files: |
+            dist/*.xpi
+            dist/*.zip
+          body_path: /tmp/release-notes.md
+          generate_release_notes: false

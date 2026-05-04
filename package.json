@@ -1,6 +1,6 @@
 {
   "name": "lookout-refactored",
-  "version": "8.0.0",
+  "version": "1.0.0",
   "description": "Thunderbird extension that reads TNEF/winmail.dat attachments",
   "private": true,
   "type": "module",
