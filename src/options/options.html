@@ -1,65 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <title>__MSG_prefwindow.title__</title>
+  <link rel="stylesheet" href="options.css">
 </head>
 
 <body>
-  <div
-    id="pane1"
-    style="display:flex; flex-direction: column;"
-    label="&pane1.title;">
-    <div>
-      <input 
-        type="checkbox"
-        id="attach_raw_mapi_check"
-        preference="extensions.lookout.attach_raw_mapi"
-        accesskey="&attach_raw_mapi_check.accesskey;"/>
-      <label for="attach_raw_mapi_check">__MSG_attach_raw_mapi_check.label__</label>
+  <h1>__MSG_prefwindow.title__</h1>
+
+  <!-- ── Attachment handling ── -->
+  <section class="option-group">
+    <div class="option-group-title">__MSG_group.attachments__</div>
+
+    <div class="option-row">
+      <input type="checkbox" id="strict_contenttype_check" accesskey="__MSG_strict_contenttype_check.accesskey__" />
+      <div class="option-label-block">
+        <label class="option-label" for="strict_contenttype_check">__MSG_strict_contenttype_check.label__</label>
+        <span class="option-hint">__MSG_strict_contenttype_check.hint__</span>
+      </div>
     </div>
 
-    <div>
-      <input type="checkbox"
-        id="direct_to_calendar_check"
-        preference="extensions.lookout.direct_to_calendar"
-        accesskey="&direct_to_calendar_check.accesskey;"/>
-      <label for="direct_to_calendar_check">__MSG_direct_to_calendar_check.label__</label>
+    <div class="option-row">
+      <input type="checkbox" id="remove_winmail_dat_check" accesskey="__MSG_remove_winmail_dat_check.accesskey__" />
+      <div class="option-label-block">
+        <label class="option-label" for="remove_winmail_dat_check">__MSG_remove_winmail_dat_check.label__</label>
+        <span class="option-hint">__MSG_remove_winmail_dat_check.hint__</span>
+      </div>
     </div>
 
-    <div>
-      <input type="checkbox"
-        id="disable_filename_character_set_check"
-        preference="extensions.lookout.disable_filename_character_set"
-        accesskey="&disable_filename_character_set_check.accesskey;"/>
-      <label for="disable_filename_character_set_check">__MSG_disable_filename_character_set_check.label__</label>
+    <div class="option-row">
+      <input type="checkbox" id="disable_filename_character_set_check" accesskey="__MSG_disable_filename_character_set_check.accesskey__" />
+      <div class="option-label-block">
+        <label class="option-label" for="disable_filename_character_set_check">__MSG_disable_filename_character_set_check.label__</label>
+        <span class="option-hint">__MSG_disable_filename_character_set_check.hint__</span>
+      </div>
     </div>
 
-    <div>
-      <input type="checkbox"
-        id="remove_winmail_dat_check"
-        preference="extensions.lookout.remove_winmail_dat"
-        accesskey="&remove_winmail_dat_check.accesskey;"/>
-      <label for="remove_winmail_dat_check">__MSG_remove_winmail_dat_check.label__</label>
+    <div class="option-row">
+      <input type="checkbox" id="attach_raw_mapi_check" accesskey="__MSG_attach_raw_mapi_check.accesskey__" />
+      <div class="option-label-block">
+        <label class="option-label" for="attach_raw_mapi_check">__MSG_attach_raw_mapi_check.label__</label>
+        <span class="option-hint">__MSG_attach_raw_mapi_check.hint__</span>
+      </div>
     </div>
+  </section>
 
-    <div>
-      <input type="checkbox"
-        id="strict_contenttype_check"
-        preference="extensions.lookout.strict_contenttype"
-        accesskey="&strict_contenttype_check.accesskey;"/>
-      <label for="strict_contenttype_check">__MSG_strict_contenttype_check.label__</label>
+  <!-- ── Calendar / Contacts ── -->
+  <section class="option-group">
+    <div class="option-group-title">__MSG_group.calendar__</div>
+
+    <div class="option-row">
+      <input type="checkbox" id="direct_to_calendar_check" accesskey="__MSG_direct_to_calendar_check.accesskey__" />
+      <div class="option-label-block">
+        <label class="option-label" for="direct_to_calendar_check">__MSG_direct_to_calendar_check.label__</label>
+        <span class="option-hint">__MSG_direct_to_calendar_check.hint__</span>
+      </div>
     </div>
+  </section>
 
-    <div>
-      <input type="checkbox"
-        id="debug_enabled_check"
-        preference="extensions.lookout.debug_enabled"
-        accesskey="&enable_debug_check.accesskey;"/>
-      <label for="debug_enabled_check">__MSG_enable_debug_check.label__</label>
+  <!-- ── Advanced / Debug ── -->
+  <section class="option-group">
+    <div class="option-group-title">__MSG_group.advanced__</div>
+
+    <div class="option-row">
+      <input type="checkbox" id="debug_enabled_check" accesskey="__MSG_enable_debug_check.accesskey__" />
+      <div class="option-label-block">
+        <label class="option-label" for="debug_enabled_check">__MSG_enable_debug_check.label__</label>
+        <span class="option-hint">__MSG_enable_debug_check.hint__</span>
+      </div>
     </div>
+  </section>
 
+  <!-- ── Footer ── -->
+  <div class="info-footer">
+    __MSG_tnef.info.prefix__
+    <a href="https://github.com/sync667/LookOut-Refactored#readme" target="_blank">__MSG_tnef.info.link__</a>
+    __MSG_tnef.info.suffix__
   </div>
 
   <script src="/scripts/i18n.js"></script>

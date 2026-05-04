@@ -1,5 +1,4 @@
-const PREF_PREFIX = "extensions.lookout.";
-const PREF_DEFAULTS = {
+export const PREF_DEFAULTS = {
   "attach_raw_mapi": false,
   "direct_to_calendar": false,
   "disable_filename_character_set": false,
@@ -7,17 +6,6 @@ const PREF_DEFAULTS = {
   "strict_contenttype": true,
   "debug_enabled": false,
   "body_part_prefix": "body_part_",
-}
-
-export async function migratePrefs() {
-  for (let name of Object.keys(PREF_DEFAULTS)) {
-    let value = await browser.LegacyPrefs.getUserPref(`${PREF_PREFIX}${name}`);
-    if (value !== null) {
-      console.info(`Migrating LookOut preference ${name} to local storage`);
-      await browser.storage.local.set({ [name]: value });
-      await browser.LegacyPrefs.clearUserPref(`${PREF_PREFIX}${name}`);
-    }
-  }
 }
 
 export async function getPrefs() {

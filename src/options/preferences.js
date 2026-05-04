@@ -17,6 +17,10 @@ async function update(event) {
 }
 
 async function init() {
+  // Set the document language to the active UI locale so assistive
+  // technologies and spell-checkers see the correct language.
+  document.documentElement.lang = browser.i18n.getUILanguage();
+
   i18n.updateDocument();
   let prefs = await storage.getPrefs();
 

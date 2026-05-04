@@ -1,2 +1,4 @@
-
+.idea
 release.bat
+node_modules/
+dist/

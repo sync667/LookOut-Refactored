@@ -125,8 +125,8 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
       Attachment: {
         listAttachments: async function (tabId) {
           let window = getMessageWindow(tabId);
-          if (!window) {
-            return
+          if (!window || !window.currentAttachments) {
+            return [];
           }
           let attachments = [];
           for (let attachmentInfo of window.currentAttachments) {
@@ -160,23 +160,28 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
 
           let modified = false;
           for (let attachment of newAttachments) {
-            let msgHdr = getDisplayedMessage(tabId);
-            if (!msgHdr) {
-              continue;
+            try {
+              let msgHdr = getDisplayedMessage(tabId);
+              if (!msgHdr) {
+                continue;
+              }
+              let realFile = await getRealFileForFile(attachment.file);
+              let url = `${Services.io.newFileURI(realFile).spec}?part=${attachment.partName}`;
+              let attachmentInfo = new AttachmentInfo({
+                contentType: attachment.contentType,
+                url,
+                name: attachment.name,
+                uri: msgHdr.folder.getUriForMsg(msgHdr),
+                isExternalAttachment: true,
+                message: msgHdr,
+                updateAttachmentsDisplayFn: window.updateAttachmentsDisplay,
+              });
+              window.currentAttachments.push(attachmentInfo);
+              modified = true;
+            } catch (err) {
+              // Tab may have been closed; skip this attachment gracefully.
+              Cu.reportError(`[LookOut] addAttachments: skipping attachment "${attachment.name}" — ${err.message}`);
             }
-            let realFile = await getRealFileForFile(attachment.file);
-            let url = `${Services.io.newFileURI(realFile).spec}?part=${attachment.partName}`;
-            let attachmentInfo = new AttachmentInfo({
-              contentType: attachment.contentType,
-              url,
-              name: attachment.name,
-              uri: msgHdr.folder.getUriForMsg(msgHdr),
-              isExternalAttachment: true,
-              message: msgHdr,
-              updateAttachmentsDisplayFn: window.updateAttachmentsDisplay,
-            });
-            window.currentAttachments.push(attachmentInfo);
-            modified = true;
           }
 
           if (!modified) {
@@ -190,15 +195,15 @@ var Attachment = class extends ExtensionCommon.ExtensionAPI {
         },
         removeAttachments: async function (tabId, partNames) {
           let window = getMessageWindow(tabId);
-          if (!window) {
-            return
+          if (!window || !window.currentAttachments) {
+            return;
           }
 
           let modified = false;
           for (let index = window.currentAttachments.length; index > 0; index--) {
             let idx = index - 1;
             if (partNames.includes(window.currentAttachments[idx].partID)) {
-              window.currentAttachments.splice(idx);
+              window.currentAttachments.splice(idx, 1);
               modified = true;
             }
           }
