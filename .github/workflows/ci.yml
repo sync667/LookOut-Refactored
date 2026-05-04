@@ -66,7 +66,6 @@ jobs:
     runs-on: ubuntu-latest
     if: >-
       github.ref == 'refs/heads/master'
-      && github.event_name == 'workflow_dispatch'
       || startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
@@ -119,7 +118,12 @@ jobs:
         run: npm ci
 
       - name: Build extension
-        run: npm run build -- --overwrite-dest
+        run: |
+          npm run build -- --overwrite-dest
+          # Rename .zip to .xpi for direct install in Thunderbird
+          for f in dist/*.zip; do
+            cp "$f" "${f%.zip}.xpi"
+          done
 
       - name: Sign and publish to ATN
         if: startsWith(github.ref, 'refs/tags/v')
