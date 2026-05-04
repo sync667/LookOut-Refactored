@@ -1,49 +1,39 @@
-# BEFORE YOU SUBMIT
+# Before You Submit
 
-Please answer the following questions for yourself before submitting an issue. **YOU MAY DELETE THIS SECTION.**
+Please check the following before submitting an issue:
 
-- I am running the latest version
-- I checked the documentation and found no answer
-- I checked to make sure that this issue has not already been filed
-- I have read the FAQ (https://github.com/TB-throwback/LookOut-fix-version/wiki/F.A.Q.)
+- [ ] I am running the latest version of LookOut (Refactored)
+- [ ] I checked existing issues to make sure this has not already been reported
+- [ ] I have disabled the original LookOut / LookOut+ / LookOut (fix version) add-ons
 
-## Context
+## Environment
 
-Please provide any relevant information about your setup. This is important in case the issue is not reproducible except for under certain conditions.
+* **Operating System:**
+* **Thunderbird version:**
+* **LookOut (Refactored) version:**
 
-* Operating System:
-* Thunderbird version number:
-* 64 bit/32 bit:
-* LookOut (fix version) version number:
+## Expected Behaviour
 
-# Expected Behavior
+Describe what you expected to happen.
 
-Please describe the behavior you are expecting
+## Actual Behaviour
 
-# Current Behavior
-
-What is the current behavior?
+Describe what actually happened.
 
 ## Steps to Reproduce
 
-Please provide detailed steps for reproducing the issue.
+1.
+2.
+3.
 
-1. step 1
-2. step 2
-3. you get it...
+## Error Console Output
 
-# Failure Information (for bugs)
-
-Please help provide information about the failure if this is a bug. If it is not a bug, please remove the rest of this template.
-
-```
-Paste code here
-```
+If applicable, open **Tools > Error Console** in Thunderbird, reproduce the issue, and paste any relevant errors below.
 
 <details>
-<summary>Failure Logs</summary>
+<summary>Console output</summary>
 
 ```
-Paste Logs here
+Paste output here
 ```
 </details>
