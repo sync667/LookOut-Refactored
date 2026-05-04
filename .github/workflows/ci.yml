@@ -84,13 +84,18 @@ jobs:
         id: version
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            # Explicit tag push -- use that exact version
             VERSION="${GITHUB_REF#refs/tags/v}"
           else
-            # Manual dispatch on master -- use latest tag or fallback
-            TAG=$(git describe --tags --abbrev=0 2>/dev/null || true)
-            if [ -n "$TAG" ]; then
-              VERSION="${TAG#v}"
+            # Push/dispatch on master -- auto-increment patch from latest tag
+            LATEST_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]' | head -n1 || true)
+            if [ -n "$LATEST_TAG" ]; then
+              MAJOR=$(echo "${LATEST_TAG#v}" | cut -d. -f1)
+              MINOR=$(echo "${LATEST_TAG#v}" | cut -d. -f2)
+              PATCH=$(echo "${LATEST_TAG#v}" | cut -d. -f3)
+              VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
             else
+              # No tags yet -- first release
               VERSION=$(node -e "console.log(JSON.parse(require('fs').readFileSync('package.json','utf8')).version)")
             fi
           fi
