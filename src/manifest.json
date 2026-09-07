@@ -6,7 +6,7 @@
     "gecko": {
       "id": "lookout@refactored",
       "strict_min_version": "140.0",
-      "strict_max_version": "152.*",
+      "strict_max_version": "157.*",
       "data_collection_permissions": {
         "required": [
           "none"
